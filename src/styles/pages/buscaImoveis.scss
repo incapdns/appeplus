@@ -1,0 +1,117 @@
+@import "../colors.scss";
+
+#busca-imoveis {
+  background-color: #fafafa;
+  .box-filtros {
+    margin-bottom: 3rem;
+    .bt-filtro {
+      svg {
+        margin-right: 0.25rem;
+      }
+    }
+  }
+  .top-corretores {
+    margin-bottom: 1rem;
+    .header {
+      margin-bottom: 2rem;
+      select {
+        border: none;
+      }
+    }
+  }
+  .imoveis {
+    margin: 2rem 0 0 0;
+    .header {
+      margin-bottom: 2rem;
+      select {
+        border: none;
+      }
+    }
+  }
+}
+
+#modalFiltros {
+  .modal-content {
+    border-radius: 0.75rem;
+    @media (max-width: 576px) {
+      border-radius: 0;
+    }
+    .modal-header {
+      border-bottom: none;
+      h5 {
+        color: $gray-4;
+      }
+    }
+    .modal-body {
+      hr {
+        margin: 2rem 0;
+      }
+      .form-check {
+        display: flex;
+      }
+      .form-check-label {
+        margin-left: 0.5rem;
+      }
+      p.label,
+      .form-label {
+        margin: 0;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 140%;
+        color: $black;
+      }
+      .col {
+        &.min {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: $gray-5;
+        }
+        &.max {
+          font-weight: normal;
+          font-size: 16px;
+          color: $gray-5;
+        }
+      }
+
+      .btn-primary {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border-radius: 20rem;
+        background-color: $white;
+        border-color: $gray-1;
+        color: $gray-3;
+        margin: 0 0.25rem;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+          background-color: $white;
+          border-color: $gray-1;
+          color: $black;
+          box-shadow: -5px -5px 10px rgba(217, 242, 255, 0.2),
+            5px 5px 10px #c7c7c7;
+        }
+        &.active {
+          background-color: $info;
+          border-color: $blue-2;
+          color: $white;
+        }
+      }
+    }
+  }
+  .modal-footer {
+    padding: 0;
+    button {
+      flex: 1;
+      margin: 0;
+      border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 2px);
+      @media (max-width: 576px) {
+        border-radius: 0;
+      }
+      height: 60px;
+      font-size: 16px;
+    }
+  }
+}

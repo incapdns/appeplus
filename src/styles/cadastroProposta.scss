@@ -1,0 +1,323 @@
+@import 'colors.scss';
+#proposta-cadastro{
+  margin-top: 100px;
+  h2{
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 16px;
+    &::before{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 48px;
+      height: 3px;
+      background-color: #4BB7F1;
+    }
+  }
+  .perfil{
+    padding: 24px 0;
+    .card{
+      padding: 24px;
+      .content{
+        span{
+          font-size: 12px;
+          color: $gray-3;
+          
+        }
+        .description-resume{
+          margin-top: 16px;
+          position: relative;
+          padding-top: 20px;
+          &::before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background-color: #4BB7F1;
+          }
+        }
+      }
+    }
+    .content-img{
+      width: 100%;
+      img{
+        width: 100%;
+        height: 210px;
+      }
+    }
+    .content-information-imovel{
+      padding:12px 32px;
+      border: 1px solid #E1E1E1;
+      border-radius: 10px;
+      span{
+        color: $gray-3;
+        font-size: 12px;
+      }
+      .icons{
+        border-top: 1px solid #e1e1e1;
+        padding-top: 16px;
+      }
+    }
+    .agendamento-imovel{
+      span{
+        font-size: 12px;
+        color: $gray-3;
+      }
+      .content-comprador{
+        border-radius: 6px;
+        border: 1px solid $gray-1;
+        background-color: $bg-white;
+        padding: 6px 10px;
+        .content-information{
+          margin: 6px 0;
+          
+          .img-comprador{
+            width: 32px ;
+            height: 32px;
+            border: 1px solid #4BB7F1;
+            border-radius: 50%;
+            margin-right: 5px;
+          }
+          .img-vendedor{
+            width: 32px ;
+            height: 32px;
+            border: 1px solid $orange-3;
+            border-radius: 50%;
+            margin-right: 5px;
+          }
+          .content-name-comprador{
+            span{
+              color: $gray-3;
+              font-size: 12px;
+            }
+            p{
+              margin: 0;
+              font-size: 16px;
+            }
+          }
+          .content-name-vendedor{
+            span{
+              color: $orange-3;
+              font-size: 12px;
+            }
+            p{
+              margin: 0;
+              font-size: 16px;
+            }
+          }
+
+        }
+        .links{
+          span{
+            font-size: 12px;
+            color: $gray-3;
+          }
+          .link{
+            border: none;
+            background-color: transparent;
+            border-radius: 6px;
+            border: 1px solid $gray-1;
+            padding: 8px;
+            &.whatsapp{
+              background-color: #3BC14A;
+            }
+          }
+        }
+        hr{
+          margin: 10px 0;
+        }
+      }
+    }
+  }
+  .credito{
+    background: #FAFAFA;
+    .card{
+      border: 1px solid #E1E1E1;
+      box-shadow: -20px -20px 40px rgba(217, 242, 255, 0.2), 20px 20px 40px #C7C7C7;
+      border-radius: 12px;
+      background-color: $bg-white;
+      padding: 12px;
+      .content-imovel{
+        background: #FAFAFA;
+        padding: 12px 32px;
+        height: 100%;
+        .preco-imovel{
+          border-bottom: 1px solid #E1E1E1;
+          margin-bottom: 16px;
+          padding-bottom: 16px;
+        }
+        .font-bold{
+          font-weight: 600;
+          margin: 0;
+        }
+        .step{
+          font-size: 12px;
+        }
+        .button-financiamento{
+          padding: 8px 12px;
+          background-color: $bg-white;
+          border: 1px solid #2E2E2E;
+          border-radius: 4px;
+        }
+        .preco-label{
+          font-size: 20px;
+          font-weight: 600;
+        }
+        
+      }
+      
+    }
+    .analise{
+      padding: 16px 0;
+      h4{
+        position: relative;
+        &::before{
+          content: '';
+          position: absolute;
+          bottom: -15px;
+          left: 0;
+          width: 50px;
+          height: 4px;
+          background-color: #FF715B;
+        }
+      }
+      .content{
+        margin-top: 20px;
+        p{
+          color: $gray-3;
+        }
+        ul{
+          li{
+            color: $gray-3;
+          }
+        }
+        
+      }
+      .proposta-manual{
+        background-color: $bg-white;
+        border: none;
+        margin: 0 12px;
+        @media(max-width:768px){
+          width:100%
+        }
+      }
+      .proposta-expressa{
+        background-color: $orange-3;
+        padding: 9px 12px ;
+        color: $bg-white;
+        border: none;
+        border-radius: 4px;
+        @media(max-width:768px){
+          width:100%;
+          margin-top:5px;
+        }
+      }
+    }
+    .entrada{
+      span{
+        color: $gray-3;
+      }
+    }
+    .parcela{
+      span{
+        color: $gray-3;
+      }
+    }
+    .financiamento{
+      .form-label{
+        font: 400 16px "Poppins", sans-serif;
+        font-size: 16px;
+        color: $bg-black;
+      }
+    }
+
+  }
+
+
+}
+#detalhes-propostas{
+  margin-top: 100px;
+  .text-comentario{
+    background-color: #FAFAFA;
+    padding: 24px 16px;
+
+  }
+  .valores-imovel{
+    .valor{
+      padding: 12px 24px;
+      border: 1px solid #E1E1E1;
+      border-radius: 6px;
+      width: 170px;
+      text-align: center;
+      p{
+        margin: 0;
+        width: auto;
+      
+      }
+    }
+    .font-bold{
+      font-weight: 600;
+      margin: 0;
+    }
+    .salvar-rascunho{
+      padding: 12px 16px;
+      border-radius: 4px;
+      border: 1px solid #2E2E2E;
+      background-color: $bg-white;
+      @media(max-width:768px){
+        width: 100%;
+      }
+    }
+    .enviar-proposta{
+
+      padding: 12px 16px;
+      border:none;
+      border-radius: 4px;
+      background: #3BC14A;
+      color: $bg-white;
+      @media(max-width:768px){
+        width: 100%;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+#modalSimuladorProposta{
+
+  .modal-content{
+    border-radius: 12px;
+    .modal-header{
+      background-color: $blue-3;
+      border-radius: 12px 12px 0 0;
+      h4{
+        color: $bg-white;
+      }
+      .close{
+        color: $bg-white;
+        border: none;
+        background-color: transparent;
+        font-size: 24px;
+        
+      }
+  
+    }
+    .modal-body{
+      .card{
+        border:1px solid $blue-3;
+        .card-title{
+          color: $orange-3;
+        }
+        .card-text{
+          font-weight: 600;
+        }
+      }
+      
+    }
+  }
+
+
+
+}

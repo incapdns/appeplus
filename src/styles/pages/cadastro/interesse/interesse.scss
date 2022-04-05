@@ -1,0 +1,232 @@
+@import "../../../colors.scss";
+
+#interesse {
+  .c-stepper__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .options {
+    margin-right: 0.25rem;
+    .label {
+      vertical-align: middle;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      height: 88px;
+      border-bottom: 1px solid $gray-1;
+      p {
+        margin: 0;
+      }
+    }
+    .buttons {
+      border-bottom: 1px solid $gray-1;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      button {
+        border-radius: 10rem !important;
+        background-color: $white;
+        border: $gray-1 1px solid;
+        color: $gray-3;
+        width: 2.75rem;
+        height: 2.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+          border: $blue-2 1px solid;
+          color: $gray-4;
+        }
+        &.active {
+          background-color: $info;
+          border: $blue-2 1px solid;
+          color: $white;
+        }
+      }
+    }
+  }
+  .area {
+    display: flex;
+    flex-direction: row;
+    .area-min {
+      flex: 1;
+    }
+    .area-max {
+      flex: 1;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+  }
+  label,
+  p {
+    span {
+      color: $secondary;
+    }
+  }
+  .btn-especialidades {
+    display: flex;
+    .btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 160px;
+      @media screen and (max-width: 768px) {
+        width: 80px;
+      }
+      height: 160px;
+      border: 1px solid $gray-3;
+      border-radius: 6px;
+      font-size: 16px;
+      color: $gray-3;
+      margin: 0.5rem;
+      &.active {
+        background: $info;
+        color: $white;
+        border: 1px solid $blue-2;
+      }
+      &:hover {
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+  .card.card-lateral {
+    .card-progress {
+      border-radius: 6px;
+      .progress {
+        height: 7px;
+        .progress-bar {
+          height: 4px;
+        }
+      }
+    }
+    p.content {
+      font-size: 12px;
+      color: $gray-3;
+    }
+    .card-header:first-child {
+      border-radius: 5px 5px 0px 0px;
+    }
+    .card-sucesso {
+      border-radius: 6px;
+      .card-header {
+        span {
+          font-size: 12px;
+          font-weight: 300;
+        }
+      }
+    }
+    .card-incompleto {
+      border-radius: 6px;
+      border: 1px solid $gray-3;
+      color: $black;
+      .card-header {
+        background: $gray-1;
+        border-bottom: none;
+        span {
+          font-size: 12px;
+          font-weight: 300;
+        }
+      }
+      .card-body {
+        p {
+          font-size: 16px;
+          font-weight: 400;
+          color: $gray-5;
+          &.ok {
+            color: $gray-3;
+          }
+        }
+      }
+    }
+  }
+  .action-button {
+    button {
+      font-weight: 600;
+      font-size: 16px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        margin-left: 10px;
+        font-size: 20px;
+      }
+    }
+  }
+  .form-check {
+    margin-bottom: 0.5rem;
+    label {
+      position: relative;
+      top: 2px;
+      font-size: 16px;
+    }
+  }
+  .form-label.label-nome {
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .select-multi__multi-value {
+    font-size: 16px;
+    font-weight: 400;
+    color: $white;
+    background-color: $primary;
+    padding: 4px 6px;
+    border-radius: 3px;
+    .select-multi__multi-value__label {
+      color: $white;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    .select-multi__multi-value__remove {
+      color: $white;
+      border-left: 1px solid $blue-2;
+      margin-left: 6px;
+      padding-left: 8px;
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+      &:hover {
+        color: $blue-1;
+        background-color: $primary;
+      }
+    }
+  }
+  .btn-outline-gray {
+    color: $gray-3;
+    border-color: $gray-3;
+    &:hover {
+      color: $white;
+      border-color: $primary;
+      background-color: $primary;
+    }
+  }
+  .btn-trash {
+    color: $gray-3;
+    &:hover {
+      color: $primary;
+    }
+  }
+  .box-checked-row {
+    .form-check-label {
+      font-size: 15px;
+    }
+  }
+  .activeSelect {
+    border: solid 1px #318cf7;
+    .box-input-checked {
+      background-color: #d9f2ff;
+    }
+  }
+  .select-tipos{
+    
+    option{
+      color:$black;
+    }
+  }
+}

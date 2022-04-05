@@ -1,0 +1,58 @@
+#agenda{
+    padding-bottom: 40px;
+}
+.formulario{
+    input{
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #B4AEAE;
+    }
+}
+.botao-formulario{
+    color: white;
+    background-color: #4BB7F1;
+    border: 1px solid #4BB7F1;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+.fc .fc-button-primary  {
+    background-color: #4BB7F1 !important;
+    border-color: #4BB7F1 !important;
+}
+
+.fc .fc-button-primary:hover  {
+    background-color: #4BB7F1 !important;
+    border-color: #4BB7F1 !important;
+    opacity: 0.9;
+}
+.fc-col-header-cell-cushion{
+    text-decoration: none;
+    color: #2E2E2E;
+}
+.fc .fc-daygrid-day-number{
+    text-decoration: none;
+    color: #2E2E2E;
+}
+.fc-daygrid-event-harness{
+    a{
+        color: black;
+    }
+    a:hover{
+        color: black;
+    }
+}
+.fc-daygrid-day-bottom{
+    a{
+        color: black;
+    }
+    a:hover{
+        color: black;
+    }
+}
+.fc-event[href], .fc-event.fc-event-draggable{
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #4BB7F1 
+}

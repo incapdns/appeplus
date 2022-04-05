@@ -1,0 +1,415 @@
+.div-card-stepper-contain {
+  position: absolute;
+  bottom: 0%;
+  right: 2%;
+  top: 12%;
+  min-width: 320px !important;
+  max-width: 320px !important;
+  @media (max-width: 991px) {
+    position: unset;
+  }
+}
+
+#StepperImovel {
+  .card-steppe {
+    min-width: 250px !important;
+    max-width: 250px !important;
+  }
+  .text-anuncio-card {
+    width: 100%;
+    // left: 16px;
+    top: 13px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    color: #474747;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    // margin: 0px 10px;
+  }
+
+  .anuncio-simples-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    position: static;
+    width: 100%;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    background: #e1e1e1;
+    border-radius: 6px 6px 0px 0px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .anuncio-simples-card-text {
+    width: 100%;
+    left: 16px;
+    top: 13px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: #adadad;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+  }
+
+  .anuncio-simples-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    // position: absolute;
+    width: 100%;
+    height: 200px;
+    // left: 1550px;
+    // top: 20%;
+    background: #ffffff;
+    border: 1px solid #e1e1e1;
+    border-radius: 6px;
+  }
+
+  .anuncio-simples-card-header-text {
+    left: 16px;
+    right: 139px;
+    top: 20%;
+    bottom: 20%;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    color: #2e2e2e;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 15px;
+  }
+
+  .anuncio-azul-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    // position: absolute;
+    width: 100%;
+    height: 140px;
+    // left: 1550px;
+    // top: 42%;
+    background: #ffffff;
+    border: 1px solid #66acff;
+    border-radius: 6px;
+  }
+
+  .anuncio-azul-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    position: static;
+    width: 100%;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    background: #0065dd;
+    border-radius: 6px 6px 0px 0px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .anuncio-azul-card-header-text {
+    left: 16px;
+    right: 139px;
+    top: 20%;
+    bottom: 20%;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 15px;
+  }
+
+  .anuncio-azul-card-text {
+    width: 250px;
+    left: 16px;
+    top: 13px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: #adadad;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+  }
+
+  .anuncio-laranja-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    // position: absolute;
+    width: 100%;
+    height: 140px;
+    // left: 1550px;
+    // top: 60%;
+    background: #ffffff;
+    border: 1px solid #ff8766;
+    border-radius: 6px;
+  }
+
+  .anuncio-laranja-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    position: static;
+    width: 100%;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    background: #fd4a19;
+    border-radius: 6px 6px 0px 0px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .anuncio-laranja-card-header-text {
+    left: 16px;
+    right: 139px;
+    top: 20%;
+    bottom: 20%;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 15px;
+  }
+
+  .anuncio-laranja-card-text {
+    width: 250px;
+    left: 16px;
+    top: 13px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: #adadad;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+  }
+
+  .anuncio-black-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    // position: absolute;
+    width: 100%;
+    height: 100px;
+    // left: 1550px;
+    // top: 76%;
+    background: #ffffff;
+    border: 1px solid #c7c7c7;
+    border-radius: 6px;
+  }
+
+  .anuncio-black-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    position: static;
+    width: 100%;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    background: #2e2e2e;
+    border-radius: 6px 6px 0px 0px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .anuncio-black-card-header-text {
+    left: 16px;
+    right: 139px;
+    top: 20%;
+    bottom: 20%;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 15px;
+  }
+
+  .anuncio-black-card-text {
+    width: 100%;
+    // left: 16px;
+    top: 13px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+
+    color: #adadad;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    // margin: 0px 10px;
+  }
+
+  .anuncio-progress-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    // position: absolute;
+    width: 100%;
+    height: 70px;
+    // left: 1550px;
+    // top: 2%;
+    background: #ffffff;
+    border: 1px solid #3bc14a;
+    box-sizing: border-box;
+    border-radius: 6px;
+  }
+
+  .text-information-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    // position: absolute;
+    width: 292px;
+    height: 70px;
+    // left: 1550px;
+    // top: 10%;
+    background: #ffffff;
+    box-sizing: border-box;
+    border-radius: 6px;
+  }
+
+  .stepper-anuncio-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    position: absolute;
+    width: 360px;
+    height: 100%;
+    left: 1500px;
+    top: 60px;
+    // background: #FAFAFA;
+    border-left: 2px solid #c7c7c7;
+    border-radius: 6px;
+    order: 4;
+  }
+
+  .text-anuncio-card-simples {
+    cursor: pointer;
+    width: 100%;
+    // left: 16px;
+    top: 13px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    color: #7a7a7a !important;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    // margin: 0px 10px;
+  }
+
+  .text-anuncio-card-azul {
+    cursor: pointer;
+    width: 100%;
+    // left: 16px;
+    top: 13px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    color: #0065dd !important;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    // margin: 0px 10px;
+  }
+
+  .text-anuncio-card-laranja {
+    cursor: pointer;
+    width: 100%;
+    // left: 16px;
+    top: 13px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 140%;
+    color: #fd4a19 !important;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    // margin: 0px 10px;
+  }
+}

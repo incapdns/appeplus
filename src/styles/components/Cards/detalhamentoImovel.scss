@@ -1,0 +1,155 @@
+@import '../../colors.scss';
+.detalhes{
+  .title-detalhes{
+    border-bottom: 2px solid #4BB7F1;
+    
+    
+  }
+  .content-dados{
+    span{
+      color: $gray-3;
+      font-size: 12px;
+    }
+    h5{
+      font-weight: 600;
+      font-size: 20px;
+    }
+    .button-imovel{
+      border: none;
+      padding: 9px 12px;
+      background-color: $bg-white;
+      color: $bg-black;
+      border: 1px solid #e1e1e1;
+      margin-top:5px ;
+    }
+
+  }
+  .content-comprador{
+    border-radius: 6px;
+    border: 1px solid $gray-1;
+    background-color: $bg-white;
+    padding: 6px 10px;
+    .content-information{
+      
+      border-right: 1px solid $gray-1;
+      
+      .img-comprador{
+        width: 32px ;
+        height: 32px;
+        border: 1px solid #4BB7F1;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .img-vendedor{
+        width: 32px ;
+        height: 32px;
+        border: 1px solid $orange-3;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .content-name-comprador{
+        span{
+          color: #4BB7F1;
+          font-size: 12px;
+        }
+        p{
+          margin: 0;
+          font-size: 16px;
+        }
+      }
+      .content-name-vendedor{
+        span{
+          color: $orange-3;
+          font-size: 12px;
+        }
+        p{
+          margin: 0;
+          font-size: 16px;
+        }
+      }
+
+    }
+    .links{
+      .link{
+        border: none;
+        background-color: transparent;
+        border-radius: 6px;
+        border: 1px solid $gray-1;
+        padding: 8px;
+        &.whatsapp{
+          background-color: #3BC14A;
+        }
+      }
+    }
+    hr{
+      margin: 10px 0;
+    }
+    .status{
+      color: $gray-3;
+      font-size: 12px;
+    }
+  }
+  .content-vendedor{
+    border-radius: 6px;
+    border: 1px solid $gray-1;
+    background-color: $bg-white;
+    padding: 6px 10px;
+    .content-information{
+      border-right: 1px solid $gray-1;
+      .img-comprador{
+        width: 32px ;
+        height: 32px;
+        border: 1px solid $orange-3;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .img-vendedor{
+        width: 32px ;
+        height: 32px;
+        border: 1px solid $orange-3;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .content-name-comprador{
+        span{
+          color: $orange-3;
+          font-size: 12px;
+        }
+        p{
+          margin: 0;
+          font-size: 16px;
+        }
+      }
+      .content-name-vendedor{
+        span{
+          color: $orange-3;
+          font-size: 12px;
+        }
+        p{
+          margin: 0;
+          font-size: 16px;
+        }
+      }
+
+    }
+    .links{
+      .link{
+        border: none;
+        background-color: transparent;
+        border-radius: 6px;
+        border: 1px solid $gray-1;
+        padding: 8px;
+        &.whatsapp{
+          background-color: #3BC14A;
+        }
+      }
+    }
+    hr{
+      margin: 10px 0;
+    }
+    .status{
+      color: $gray-3;
+      font-size: 12px;
+    }
+  }
+}

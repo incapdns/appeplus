@@ -1,0 +1,58 @@
+@import "../../colors.scss";
+#dashboard-adm{
+  .graf{
+    width: 50%;
+    @media(max-width:768px){
+      width: 100%;
+    }
+    .recharts-wrapper{
+      margin: 0 auto;
+    }
+  }
+  .legends{
+    width: 50%;
+    @media(max-width:768px){
+      width: 100%;
+    }
+    display: flex;
+    justify-content: end;
+    .content{
+      display: flex;
+      min-width: 50%;
+      justify-content: start;
+      flex-wrap: wrap;
+      @media (max-width:768px) {
+        flex-wrap: nowrap;
+      }
+      .colorIcon{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 7px 4px;
+        @media (max-width:768px) {
+          // flex-direction: row;
+        }
+      
+      }
+      div{
+        .icon{
+          width: 12px;
+          height: 12px;
+          border-radius: 50px;
+        }
+      }
+      .name-legend{
+        display: flex;
+        flex-direction: column;
+        span{
+          @media (max-width:768px) {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    
+    
+  }
+}

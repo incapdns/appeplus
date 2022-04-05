@@ -1,0 +1,177 @@
+@import '../../colors.scss';
+.historico{
+  padding: 24px;
+  .timeline{
+    position: relative;
+    width: 100%;
+    
+    ul{
+      margin: 0;
+      padding: 0;
+      
+      li{
+        list-style: none;
+        position: relative;
+        width: 100%;
+        padding: 0;
+        box-sizing: border-box;
+        width: 100%;
+        clear: both;
+        display: flex;
+        
+        .date{
+          margin: 0;
+          padding:  0 0 24px 0;
+          font-size: 14px;
+          width: 20%;
+          position: relative;
+          @media(max-width:768px){
+            width: 60%;
+          }
+          &.teste{
+            &::before{
+              content: '';
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 15px;
+              height: 15px;
+              background: #3BC14A;
+              border-radius: 50%;
+              
+            }
+            &::after{
+              content: '';
+              position: absolute;
+              top: 0;
+              right:6px;
+              width: 2px;
+              height: 100%;
+              background: #3BC14A;
+            }
+          }
+          &.teste2{
+            &::before{
+              content: '';
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 15px;
+              height: 15px;
+              background: #fafafa;
+              border-radius: 50%;
+              border: 2px solid #3BC14A;
+              z-index: 2;
+            }
+            &::after{
+              content: '';
+              position: absolute;
+              top:0;
+              right:7px;
+              width: 2px;
+              height: 100%;
+              background: #cecece;
+              z-index: 1;
+            }
+           
+          }
+          &.teste3{
+            &::before{
+              content: '';
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 15px;
+              height: 15px;
+              background: #cecece;
+              border-radius: 50%;
+              
+            }
+            &::after{
+              content: '';
+              position: absolute;
+              top:0;
+              right:7px;
+              width: 2px;
+              height: 100%;
+              background: #cecece;
+            }
+            
+            
+          }
+         
+          p{
+            margin: 0;
+            color: $bg-black;
+            font-size: 12px;
+          }        
+        }
+
+        .historico-status{
+          width: 80%;
+          margin-left: 10px; 
+          padding:  0 0 15px 0;
+
+          @media(max-width:768px){
+            right: -165px;
+            top: 10px;
+          }
+          p{
+            margin: 0;
+            @media(max-width:768px){
+              font-size: 12px;
+            }
+            &.ativo{
+              font-weight: 600;
+            }
+          }
+        }
+        
+      }
+    }
+    
+  }
+}
+.proposta-status{
+  padding: 12px 24px;
+  position: relative;
+  @media(max-width:768px){
+    display: none;
+  }
+  &::before{
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: #E1E1E1;
+    top: 0;
+    left: 0;
+  }
+  .proposta-title{
+    font-weight: 600;
+  }
+  .links{
+    button{
+      border: none;
+      color: $bg-black;
+      padding: 9px 12px;
+      font-size: 16px;
+      margin: 10px;
+      background-color: transparent;
+      &.proposta-vizualizar{
+        padding: 9px 12px;
+        font-size: 16px;
+        border: none;
+        border: 1px solid #E1E1E1;
+        background-color: $bg-white;
+        margin: 10px;
+        svg{
+          font-size: 24px;
+        }
+
+      }
+      
+    }
+  }
+}
+

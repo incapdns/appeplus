@@ -1,0 +1,265 @@
+@import '../colors.scss';
+
+#jumbotron {
+  padding: 20px;
+  height: 610px;
+  padding-top: 120px;
+  text-align: left;
+  z-index: 1;
+  p.subtitle{
+    font-size: 20px;
+  }
+  hr {
+    border-top: 3px solid $orange-2;
+    width: 60px;
+    opacity: 1;
+  }
+  .container{ 
+    margin-top: 2rem;
+  }
+  &.para-morar{
+    background: url('../../assets/Home/bg-para-morar.jpg') no-repeat center center;
+    h1, p {
+      color: $white;
+    }
+  }
+  &.para-trabalhar{
+    background: url('../../assets/Home/bg-para-trabalhar.jpg') no-repeat center center;
+    h1, p {
+      color: $black;
+    }
+  }
+  
+}
+
+#filtro{
+  max-width: 1040px;
+  margin: 3rem auto;
+  h4{
+    margin-bottom: 45px;
+  }
+  .row{
+    .col-lg-3{ 
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      background-position: bottom center;
+      background-repeat: no-repeat;
+      transition: 0.15s ease-in-out;
+      height: 250px;
+      .title{
+        border-bottom: $gray-1 3px solid;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        h4{
+          margin: 0;
+          color: $gray-4;
+        }
+      }
+    }
+    .col-lg-3:hover{
+      cursor: pointer;
+      .title{
+        border-bottom: $info 3px solid;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        h4{
+          margin: 0;
+          color: $black;
+        }
+      }
+    }
+  }
+  &.preco-para-morar {
+    .row{
+      .col-lg-3.p300{ background-image: url('../../assets/icons/precos/para-morar300off.png');}
+      .col-lg-3.p300:hover{background-image: url('../../assets/icons/precos/para-morar300.png');}
+      .col-lg-3.p400{ background-image: url('../../assets/icons/precos/para-morar400off.png');}
+      .col-lg-3.p400:hover{background-image: url('../../assets/icons/precos/para-morar400.png');}
+      .col-lg-3.p500{ background-image: url('../../assets/icons/precos/para-morar500off.png');}
+      .col-lg-3.p500:hover{background-image: url('../../assets/icons/precos/para-morar500.png');}
+      .col-lg-3.p750{ background-image: url('../../assets/icons/precos/para-morar750off.png');}
+      .col-lg-3.p750:hover{background-image: url('../../assets/icons/precos/para-morar750.png');}
+    }
+  }
+  &.tipo-para-morar {
+    .row{
+      .col-lg-3.item-1{ background-image: url('../../assets/icons/tipos/morar-tipo-1off.png');}
+      .col-lg-3.item-1:hover{background-image: url('../../assets/icons/tipos/morar-tipo-1.png');}
+      .col-lg-3.item-2{ background-image: url('../../assets/icons/tipos/morar-tipo-2off.png');}
+      .col-lg-3.item-2:hover{background-image: url('../../assets/icons/tipos/morar-tipo-2.png');}
+      .col-lg-3.item-3{ background-image: url('../../assets/icons/tipos/morar-tipo-3off.png');}
+      .col-lg-3.item-3:hover{background-image: url('../../assets/icons/tipos/morar-tipo-3.png');}
+      .col-lg-3.item-4{ background-image: url('../../assets/icons/tipos/morar-tipo-4off.png');}
+      .col-lg-3.item-4:hover{background-image: url('../../assets/icons/tipos/morar-tipo-4.png');}
+    }
+  }
+  &.preco-para-trabalhar {
+    .row{
+      .col-lg-3.p300{ background-image: url('../../assets/icons/precos/para-trabalhar-300off.png');}
+      .col-lg-3.p300:hover{background-image: url('../../assets/icons/precos/para-trabalhar-300.png');}
+      .col-lg-3.p400{ background-image: url('../../assets/icons/precos/para-trabalhar-400off.png');}
+      .col-lg-3.p400:hover{background-image: url('../../assets/icons/precos/para-trabalhar-400.png');}
+      .col-lg-3.p500{ background-image: url('../../assets/icons/precos/para-trabalhar-500off.png');}
+      .col-lg-3.p500:hover{background-image: url('../../assets/icons/precos/para-trabalhar-500.png');}
+      .col-lg-3.p750{ background-image: url('../../assets/icons/precos/para-trabalhar-750off.png');}
+      .col-lg-3.p750:hover{background-image: url('../../assets/icons/precos/para-trabalhar-750.png');}
+    }
+  }
+  
+  &.tipo-para-trabalhar {
+    .row{
+      .col-lg-3.item-1{ background-image: url('../../assets/icons/tipos/para-trabalhar-1off.png');}
+      .col-lg-3.item-1:hover{background-image: url('../../assets/icons/tipos/para-trabalhar-1.png');}
+      .col-lg-3.item-2{ background-image: url('../../assets/icons/tipos/para-trabalhar-2off.png');}
+      .col-lg-3.item-2:hover{background-image: url('../../assets/icons/tipos/para-trabalhar-2.png');}
+      .col-lg-3.item-3{ background-image: url('../../assets/icons/tipos/para-trabalhar-3off.png');}
+      .col-lg-3.item-3:hover{background-image: url('../../assets/icons/tipos/para-trabalhar-3.png');}
+      .col-lg-3.item-4{ background-image: url('../../assets/icons/tipos/para-trabalhar-4off.png');}
+      .col-lg-3.item-4:hover{background-image: url('../../assets/icons/tipos/para-trabalhar-4.png');}
+    }
+  }
+}
+
+#beneficios{
+  padding: 2rem 0;
+  margin: 2rem 0 0;
+  &.para-morar{
+    background: url('../../assets/Home/bg-plus-morar.png') repeat-x top center;
+  }
+  &.para-trabalhar{
+    background: url('../../assets//Home//bg-plus-trabalhar.png') repeat-x top center;
+  }
+  .container{
+    max-width: 1040px;
+    margin: 0 auto;
+    .header{
+      p{
+        color: $white;
+      }
+      h2{
+        color: $white;
+        margin-bottom: 3rem;
+      }
+    }
+    .body{
+      padding: 1rem 4rem;
+      h2{
+        color: $black;
+        text-align: center;
+      }
+      .divider{
+        border: $black 2px solid;
+        margin: 2rem 0;
+        &.vender{
+          border-color: $primary;
+        }
+        &.corretor{
+          border-color: $secondary;
+        }
+        
+      }
+    }
+  } 
+  .text-vender{
+    text-align: justify !important;
+  }
+  .text-corretor{
+    text-align: justify !important;
+  } 
+}
+
+#lancamentos{
+  background: url('../../assets/Home/bgLancamentos.png') repeat-x bottom center;
+  padding: 2rem 0;
+  margin: 0 0 2rem 0;
+  .lancamento{
+    margin: 0 auto;
+    
+    max-width: 1040px;
+    .header{
+      h2{
+        margin-bottom: 2rem;
+      }
+      p{
+        color: $gray-4;
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}
+
+#anuncio-plus{
+  background: url('../../assets/Home/bgAnuncios.png') repeat-x bottom center;
+  padding: 2rem 0;
+  margin: 2rem 0;
+  .anuncio-plus{
+    margin: 0 auto;
+    max-width: 1040px;
+      .header{
+        .text-select{
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          p{
+            margin: 0;
+            font-size: 16px;
+          }
+          .form-select{
+            font-size: 16px ;
+            @media(max-width:768px){
+              font-size: 16px;
+              padding: 0;
+            }
+            padding-left: 5px;
+            font-weight: 600;
+            color: $primary;
+            width: auto;
+            border: none;
+            &:focus{
+              outline: none;
+            }
+            select::-ms-expand {
+              display: none;
+            }
+            option{
+              font-size: 16px ;
+              font-weight: 600;
+              color: #0065DD;
+              border: 1px solid red;
+              outline: none;
+              
+            }
+          }
+        }
+        p{
+          color: $gray-4;
+        }
+        p.muted{
+          font-size: 16px;
+          color: $gray-3;
+        }
+        a{
+          color: $gray-3;
+          font-size: 16px;
+        }
+      } 
+      p{
+        span {
+          color: $primary;
+        }
+      }
+  }
+}
+
+#divider {
+  max-width: 1040px;
+  hr {
+    width: 100%;
+  }
+}

@@ -1,0 +1,91 @@
+#suas-avaliacoes{
+    background-color: #FAFAFA;
+    width: 100%;
+    .avaliacoes{
+        .card-container{
+            padding: 0 10px 0 0;
+        }
+        .card{
+            margin-bottom: 20px;
+            padding: 20px;
+            .titulo-card{
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            .atualizar{
+                background-color: #FAFAFA;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 50px;
+                color: #ADADAD;
+                font-size: 12px;
+            }
+            .progresso-geral{
+                .barra-geral{
+                    border-right: 2px solid #E1E1E1;
+                    @media(max-width: 991px){
+                        border: none;
+                    }
+                }
+                .nota-geral{
+                    display: flex;
+                    align-items: center;
+                    p{
+                        color: #ADADAD;
+                        margin-bottom: 0;
+                    }
+                    @media(max-width: 991px){
+                        margin-top: 20px;
+                    }
+                    .nota-valor{
+                        font-weight: 600;
+                        font-size: 24px;
+                        margin-left: 20px;
+                        color: black;
+                    }   
+                }
+            }
+            .progresso{
+                border-bottom: 2px solid #E1E1E1;
+                padding-bottom: 15px;
+                .barra{
+                    border-right: 2px solid #E1E1E1;
+                    @media(max-width: 576px){
+                        border: none;
+                    }
+                }
+                .nota{
+                    display: flex;
+                    align-items: center;
+                    p{
+                        color: #ADADAD;
+                        margin-bottom: 0;
+                    }
+                    @media(max-width: 576px){
+                        margin-top: 20px;
+                    }
+                    .nota-valor{
+                        font-weight: 600;
+                        font-size: 24px;
+                        margin-left: 20px;
+                        color: black;
+                    }
+                }
+            }
+            .total{
+                margin-top: 20px;
+                display: flex;
+                p{
+                    color: #ADADAD;
+                }
+                .total-valor{
+                    color: black;
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin-left: 22px;
+                }
+            }
+        }
+
+    }
+}

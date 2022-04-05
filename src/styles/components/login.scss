@@ -1,0 +1,70 @@
+@import '../colors.scss';
+
+#modalLogin {
+  @media (min-width: 576px){
+    .modal-sm {
+      max-width: 350px;
+    }
+  }
+  .modal-content{
+    border-radius: 0.75rem;
+    @media(max-width:576px){
+      border-radius: 0;
+    }
+    .modal-header {
+      border-bottom: none;
+      background-color: #FD4A19;
+      border-radius: 12px 12px 0px 0px;
+      h5 {
+        color: $gray-5;
+      }
+    }
+    .modal-body {
+      .alert{
+        margin-bottom: 0;
+      }
+      p{
+        font-size: 14px;
+        color: $gray-4;
+        text-align: center;
+      }
+      .btn-link{
+        color: $gray-5;
+        text-decoration: none;
+        &:hover{
+          color: $gray-3;
+        }
+      }
+      .btn-google {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: $orange-4;
+        border-color: $orange-5;
+        color: $white;
+        span{
+          text-align: center;
+          flex: 1;
+        }
+        &:hover {
+          background-color: $orange-5;
+          border-color: $orange-5;
+        }
+      }
+    }
+    .modal-footer {
+      padding: 0;
+      button {
+        flex: 1;
+        margin: 0;
+        border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 2px);
+        @media(max-width:576px){
+          border-radius: 0;
+        }
+        height: 60px;
+        font-size: 16px;
+      }
+    }
+  }
+  
+}

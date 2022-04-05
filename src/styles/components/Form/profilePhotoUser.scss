@@ -1,0 +1,55 @@
+@import '../../colors.scss';
+.box-user-photo{
+  border-right: 2px solid $gray-1;
+  margin-right: 3rem;
+  @media(max-width:767px){
+    margin: 0;
+    border: none;
+  }
+  .profile{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid $gray-2;
+    #photo{
+      width: 150px;
+      height: 150px;
+    }
+    #file{
+      display:none;
+    }
+  }
+  .uploadBtn{
+    color: $bg-black;
+    background-color: transparent;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 16px;
+    font-weight: 400;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    &:hover{
+      p{
+        display: block;
+      } 
+    }
+    p{
+      height: 40px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      background: rgba(0,0,0, 0.7);
+      color: $bg-white;
+      line-height: 1.5;
+      font-size: 15px;
+      padding-top: 5px;
+      display: none;
+      margin: 0;
+    }
+  }
+}

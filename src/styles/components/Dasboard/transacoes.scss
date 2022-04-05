@@ -1,0 +1,32 @@
+@import "../../colors.scss";
+#negociacoes-dashboard {
+  .table-responsive {
+    .table {
+      thead {
+        tr {
+          th {
+            border-bottom: $gray-1 2px solid;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 140%;
+            color: $gray-3;
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 140%;
+            color: $black;
+            vertical-align: middle;
+            span {
+              color: $gray-3;
+            }
+          }
+        }
+      }
+    }
+  }
+}

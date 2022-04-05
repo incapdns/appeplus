@@ -1,0 +1,26 @@
+@import '../colors.scss';
+
+#recuperar-senha {
+  padding: 120px 1rem 1rem 1rem;
+  @media (min-width: 576px){
+    max-width: 390px;
+  }
+  p {
+    color: $gray-4;
+  }
+  p.subtitle{
+    font-size: 20px;
+    color: $gray-5;
+  }
+  hr {
+    border-top: 3px solid $orange-2;
+    width: 60px;
+    opacity: 1;
+  }
+  .container{ 
+    margin-top: 2rem;
+    border: $gray-3 1px solid;
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }  
+}

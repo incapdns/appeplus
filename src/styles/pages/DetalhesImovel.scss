@@ -1,0 +1,727 @@
+@import '../colors.scss';
+@import '../global.scss';
+
+#imovel{
+  margin-top: 96px;
+  
+  .slick-dots{
+    display: none !important;
+    @media(max-width: 767px){
+      display: block !important;
+    }
+  }
+  .slick-slide{
+    div{
+      padding: 0;
+    }
+  }
+  .slides .slick-prev,
+  .slides .slick-next {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  }
+
+  .slides {
+    position: relative;
+  }
+
+  .slides .slick-prev,
+  .slides .slick-next {
+    position: absolute;
+    top: 50%;
+    z-index:1;
+  }
+
+  .slides .slick-prev {
+    left: 5%;
+    &::before{
+      content: '';
+    }
+    
+  }
+  .slides .slick-next {
+    right: 5%;
+    &::before{
+      content: '';
+    }
+  }
+  .card-img-top {
+      object-fit: cover;
+      height: 400px;
+      object-position: center;
+      border-radius: calc(0.25rem - 1px);
+      cursor: pointer;
+      @media only screen and (min-width: 360px) and (max-width: 768px) {
+       height: 200px;
+      }
+  }
+}
+#description-imovel{
+  .wrapper{
+    @media only screen and (min-width: 360px) and (max-width: 768px) {
+      flex-flow: column-reverse;
+    }
+  }
+  .description-anuncio{
+    @media(max-width: 768px) {
+      margin-top: 30px;
+    }
+    span{
+      color: $gray-3;
+    }
+    .title{
+      color: $bg-black;
+      font-size: 40px;
+      margin: 12px 0;
+    }
+    .sub-title{
+      font-weight: 600;
+      color: $bg-black;
+  
+    }
+  }
+  .anuncio-plus{
+    padding: 16px;
+    background-color: $bg-black;
+    border-radius: 6px;
+    .sub-title-anuncio{
+      font-size: 16px;
+      font-weight: 600;
+      color: $bg-white;
+      position: relative;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      &::before{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 48px;
+        background-color: $bg-white;
+      }
+    }
+    p{
+      color: $bg-white;
+    }
+  }
+  .anuncio-laranja{
+    padding: 16px;
+    background-color: $orange-3;
+    border-radius: 6px;
+    .sub-title-anuncio{
+      font-size: 16px;
+      font-weight: 600;
+      color: $bg-white;
+      position: relative;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      &::before{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 48px;
+        background-color: $bg-white;
+      }
+    }
+    p{
+      color: $bg-white;
+    }
+  }
+  .anuncio-azul{
+    padding: 16px;
+    background-color: $blue-3;
+    border-radius: 6px;
+    .sub-title-anuncio{
+      font-size: 16px;
+      font-weight: 600;
+      color: $bg-white;
+      position: relative;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      &::before{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 48px;
+        background-color: $bg-white;
+      }
+    }
+    p{
+      color: $bg-white;
+    }
+  }
+  .anuncio-simples{
+    padding: 16px;
+    background-color: #FAFAFA;
+    border-radius: 6px;
+    .sub-title-anuncio{
+      font-size: 16px;
+      font-weight: 600;
+      color: $bg-black;
+      position: relative;
+      padding: 16px 0;
+      margin-bottom: 16px;
+      &::before{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 48px;
+        background-color: $bg-black;
+      }
+    }
+  }
+  .itens-imovel{
+    padding: 24px 0 0 0;
+    .sub-title{
+      font-weight: 600;
+    }
+    button{
+      border: none;
+      background-color: transparent;
+      color: $gray-3;
+    }
+  }
+  .itens-imovel-plus{
+    padding: 24px 0 0 0;
+    .sub-title{
+      font-weight: 600;
+    }
+    button{
+      border: none;
+      background-color: transparent;
+      color: $gray-3;
+    }
+  }
+  .itens-imovel-plus-especial{
+    padding: 24px 0;
+    border-bottom: 1px solid $gray-1;
+
+    .sub-title{
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+  }
+  .infos{
+    border-top: 1px solid $gray-1;
+    border-bottom: 1px solid $gray-1;
+    padding: 24px 0;
+    p{
+      margin: 10px 0;
+    }
+  }
+  .infos-destaques{
+    border-top: 1px solid $gray-1;
+    border-bottom: 1px solid $gray-1;
+    padding: 24px 0;
+    p{
+      margin: 10px 0;
+    }
+  }
+  .infos-destaques-descricao{
+    border-bottom: 1px solid $gray-1;
+    padding: 24px 0;
+    p{
+      margin: 10px 0;
+    }
+  }
+  .description{
+    border-top: 1px solid $gray-1;
+    border-bottom: 1px solid $gray-1;
+    padding: 24px 0;
+    .title{
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+  }
+  .mapa{
+    .card-carrousel{
+      
+      .card-icons{
+        border: 1px solid $orange-3;
+        border-radius: 6px;
+        width: 120px;
+        height: 120px;
+        padding: 16px;
+        position: relative;
+        background-color: $bg-white;
+        margin: 0 auto;
+        .qtdlugares{
+          position: absolute;
+          top: -20%;
+          right: -10%;
+          background-color: $bg-white;
+          border-radius: 50%;
+          border: 2px solid $orange-3;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          width: 50px;
+          height: 50px;
+        }
+      }
+      
+      .slick-next, .slick-prev{
+        width: auto;
+        height: auto;
+        z-index: 1;
+        &::before{
+          display: none;
+        }
+      }
+
+    }
+    p{
+      font-weight: 600;
+    }
+    .card-mapa{
+      border: 2px solid $orange-3;
+      padding: 0;
+      border-radius: 6px;
+    }
+  }
+  .bairros-proximos{
+    .sub-title{
+      font-weight: 600;
+    }
+    .bairros{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 12px;
+      border: 1px solid #ADADAD;
+      color: #ADADAD;
+      border-radius: 50px;
+      margin: 5px 0;
+      p{
+        color: #ADADAD;
+        margin: 0 3px;
+      }
+    }
+  }
+  .card-detalhes{
+    position: absolute;
+    top: -5%;
+    @media only screen and (min-width: 360px) and (max-width: 768px) {
+      position: unset;
+    }
+    padding: 20px;
+    background-color: $bg-white;
+    border: 1px solid #E1E1E1;
+    box-shadow: -20px -20px 40px rgba(217, 242, 255, 0.2), 20px 20px 40px #C7C7C7;
+    border-radius: 10px;
+    .share{
+      .links{
+        button{
+          color: $gray-3;
+          border: none;
+          background-color: transparent;
+          margin: 0 5px;
+          &.copy{
+            background-color: #FAFAFA;
+          }
+        }
+      }
+      .compartilhar{
+        &.ativo{
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: none;
+          background-color: $orange-3;
+          color: $bg-white;
+        }
+        &.inativo{
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: 2px solid $orange-3;
+          background-color: $bg-white;
+          color: $orange-3;
+        }
+      }
+    }
+  }
+  .visualizacao{
+    margin: 16px 0;
+    p{
+      margin: 0;
+    }
+  }
+  .valor{
+    padding: 16px 0;
+    margin: 16px 0;
+    border-top: 1px solid $gray-1;
+    border-bottom: 1px solid $gray-1;
+  }
+  .valores{
+    p{
+      color: $blue-3;
+    }
+  }
+  .financiamento{
+    background-color: #FAFAFA;
+    padding: 24px 12px;
+    border-radius: 6px;
+    .rc-slider-track{
+      background-color: $blue-3;
+    }
+    .rc-slider-handle{
+      border: 1px solid  $gray-3;
+    }
+    .simular-financiamento{
+      background-color: $bg-white;
+      padding: 12px 16px;
+      box-shadow: -5px -5px 10px rgba(217, 242, 255, 0.2), 5px 5px 10px #C7C7C7;
+      border-radius: 6px;
+      border: none;
+    }
+    
+  }
+  .visita{
+   padding: 16px; 
+   background-color: #FAFAFA;
+   
+  .content-visita{
+    .content-title{
+      span{
+        margin-right: 5px;
+      }
+      p{
+       font-weight: 600;
+       margin: 0;
+      }
+    }  
+   }
+   .content-atencao{
+    margin: 16px 0;
+    p{
+      font-size: 12px;
+    }
+   }
+   button{
+     border: 2px solid $bg-black;
+     border-radius: 6px;
+     padding: 12px 16px;
+     background-color: $bg-white;
+   }
+   .button-agenda{
+      width: 100% ;
+      background-color: $blue-3;
+      border: none;
+      color: $bg-white;
+    }
+  }
+}
+.corretor-footer{
+  background-color: $orange-3;
+  padding: 40px 0;
+  .destaque-corretor-footer{
+    width: 100%;
+    position: relative;
+    
+    margin-top: 20px;
+    img{
+      position: absolute;
+      top: -10%;
+      left: -5%;
+      @media(max-width:768px){
+        display: none;
+      }
+    }
+    .content-title{
+      width: 100%;
+      h4{
+        color:$bg-white;
+        width: 80%;
+        margin-left: auto;
+        @media(max-width:768px){
+         width: 100%;
+         margin: 0 0 10px 0;
+        }
+      }
+    }
+    
+    .content{
+      margin-left: auto;
+      width: 100%;
+      background-color: $bg-white;
+      padding: 24px 16px;
+      
+      border-radius: 6px;
+      .content-text{
+       width: 80%;
+       margin-left: auto;
+       @media(max-width:768px){
+        width: 100%;
+        margin: 0;
+       }
+       p{
+         margin: 0;
+       }
+      }
+    }
+  }
+ 
+}
+#modalCorretor{
+  border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 2px);
+  .modal-content{
+    border-radius: 12px;
+    .modal-header{
+      background-color: $blue-3;
+      h4{
+        color: $bg-white;
+      }
+      .close{
+        color: $bg-white;
+        border: none;
+        background-color: transparent;
+        font-size: 24px;
+      }
+      
+    }
+    .modal-body{
+      padding: 0;
+      overflow-x: hidden;
+      .filter-corretor{
+        padding: 24px 16px;
+        background: #FAFAFA;
+        p{
+          font-weight: 600;
+        }
+        .input-group-text{
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid $gray-3;
+        }
+        .form-control{
+          border: none;
+          background-color: transparent;
+          border-bottom: 1px solid $gray-3;
+          &:focus{
+            outline: none;
+            box-shadow: none;
+            border: none;
+            border-bottom:1px solid $gray-3 ;
+          }
+        }
+        
+      }
+      .content-corretor-modal{
+        background-color: $bg-white;
+        padding: 16px;
+        .title-corretor{
+          color: $gray-3;
+        }
+        .content-corretor-termos{
+          height: 300px;
+          overflow-y: scroll;
+          &::-webkit-scrollbar{
+            width: 5px;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #E1E1E1;
+          }
+        }
+        .termos{
+          font-size: 12px;
+          color: $gray-3;
+          .button-termos{
+            font-size: 12px;
+            border: none;
+            background-color: transparent;
+            color: $blue-3;
+            font-weight: 600;
+          }
+        }
+        
+      }
+      
+    }
+    .modal-footer{
+      padding: 0;
+      border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 2px);
+      button{
+        flex: 1 1;
+        margin: 0;
+        border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 2px);
+        height: 60px;
+        font-size: 16px;
+      }
+    }
+  }
+
+ 
+  
+
+}
+#modalSimulador{
+
+    .modal-content{
+      border-radius: 12px;
+      .modal-header{
+        background-color: $blue-3;
+        border-radius: 12px 12px 0 0;
+        h4{
+          color: $bg-white;
+        }
+        .close{
+          color: $bg-white;
+          border: none;
+          background-color: transparent;
+          font-size: 24px;
+          
+        }
+    
+      }
+      .modal-body{
+        .card{
+          border:none;
+          .card-title{
+            color: $orange-3;
+          }
+          .card-text{
+            font-weight: 600;
+          }
+          .modal-info{
+            .info-valores{
+              .primeiro-valor{
+                border-right: 1px solid $gray-1;
+              }
+              .valores-title{
+                font-size: 12px;
+              }
+              .valor{
+                font-weight: 600;
+              }
+            }
+            .info-bancos{
+              .bancos-title{
+                font-weight: 600;
+                font-size: large;
+                padding-bottom: 10px;
+                border-bottom: 1px solid $gray-1;
+              }
+              .bancos-botoes{
+                background-color: white;
+                border: 1px solid $gray-3;
+                padding: 5px 15px;
+                border-radius: 5px;
+                width: 100%;
+                height: 85px;
+                @media(max-width: 767px){
+                  height: auto;
+                }
+              }
+              .bancos-botoes:focus{
+                background-color: #DEEEF1 ;
+                border: 1px solid $blue-2;
+                padding: 5px 15px;
+                border-radius: 5px;
+              }
+              .bancos-porcentagem{
+                text-align: center;
+                margin-top: 10px;
+              }
+              .bancos-parcelas{
+                .valor-financiamento {
+                  display: flex;
+                  justify-content: space-between;
+                  padding-top: 20px;
+                  border-top: 1px solid #E1E1E1;
+                  .valor-parcela{
+                    font-weight: 600;
+                  }
+                }
+                .primeira-parcela{
+                  display: flex;
+                  justify-content: space-between;
+                  .valor-parcela{
+                    font-weight: 600;
+                  }
+                }
+                .ultima-parcela{
+                  display: flex;
+                  justify-content: space-between;
+                  border-bottom: 1px solid $gray-1;
+                  .valor-parcela{
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
+            .info-simulacao{
+              .sim-title{
+                font-weight: 600;
+                font-size: large;
+                padding-bottom: 10px;
+                border-bottom: 1px solid $gray-1;
+              }
+              button{
+                background-color: white;
+                border: 1px solid $gray-3;
+                padding: 5px 15px;
+                border-radius: 5px;
+              }
+              .slider-valor{
+                display: flex;
+                @media(max-width: 1199px){
+                  display: block;
+                }
+                @media(max-width: 576px){
+                  display: flex;
+                  margin-bottom: 10px;
+                }
+              }
+            }
+          }
+          .lateral{
+            padding-right: 25px;
+            .lateral-title{
+              font-weight: 600;
+              font-size: large;
+            }
+            .lateral-title::after{
+              content:"";
+              display:block;
+              width: 2em;
+              max-width:70%;
+              border-bottom: 3px solid #fc4b19;
+              margin: 10px 0 15px 0;
+            }
+            .lateral-text{
+              color: $gray-3;
+              text-align: justify;
+            }
+          }
+        }
+      }
+    }
+  
+ 
+  
+}
+#modalLoginImovel{
+  p{
+    color: $gray-3;
+  }
+  .cadastro-button{
+    background-color: transparent;
+    border: none;
+    color: $blue-1;
+  }
+  .login-imovel{
+    border-radius: 6px;
+    padding: 12px 16px;
+    width: 100%;
+  }
+}
