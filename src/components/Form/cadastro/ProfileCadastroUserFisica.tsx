@@ -1,4 +1,4 @@
-import { useState, useCallback, FormEvent, useEffect } from "react";
+import { useState, useCallback, FormEvent, useEffect, useMemo } from "react";
 import "../../../styles/components/Form/profileCadastroUser.scss";
 import { v4 as uuidv4 } from "uuid";
 import filesize from "filesize";
@@ -19,10 +19,13 @@ import Alert from "../../Alert";
 import { useHistory } from "react-router-dom";
 import { RiArrowRightCircleFill, RiArrowLeftCircleFill } from "react-icons/ri";
 import api from "../../../services/api";
-import { iDadosUsuario, tipoUsuario } from "../../../@types";
+import { iDadosUsuario } from "../../../@types";
 import { IArquivos } from "./ProfileCadastroCorretor";
 import minify from "../../../utils/minify";
 import parse from "../../../utils/parse";
+import Upload, { IFile } from "../../UploadArquivos/Upload";
+import { FiSave } from "react-icons/fi";
+import { Upload as UploadCore } from "../../UploadArquivos/core/Upload";
 
 interface iStep {
   setStep: (value: number) => void;
@@ -30,22 +33,9 @@ interface iStep {
   step: number;
   idImovel?: number | unknown;
 }
-export interface IFile {
-  id: string;
-  name: string;
-  readableSize: string;
-  uploaded?: boolean;
-  preview: string;
-  file: File | Blob | string;
-  progress?: number;
-  error?: boolean;
-  url: string;
-  codArquivo: string;
-  codTipoArquivo: string;
-}
 
 export interface IArquivo {
-  formFile: IFile | undefined;
+  formFile: any | undefined;
   nomeSocial: string;
   dtNascimento: string;
   email: string;
@@ -126,12 +116,10 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );
-  var codNivel: any;
   var codCliente: any;
 
   if (props.corretorCadastrando && window.location.pathname === '/cadastro/cliente/vendedor') {
     codCliente = Number(localStorage.getItem('@appePlus/codClienteEdicao'));
-    codNivel = localStorage.getItem('@appePlus/codNivelClienteEdicao');
   } else {
     codCliente = usuario.codCliente;
   }
@@ -139,49 +127,47 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
   const history = useHistory();
   const [sexo, setSexo] = useState("");
   const [estadoCivil, setEstadoCivil] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
   const [cpf, setCpf] = useState("");
   const [rg, setRg] = useState("");
   const [alertErro, setAlertErro] = useState(false);
   const [msgErro, setMsgErro] = useState("");
-  const [imgPerfil, setImgPerfil] = useState<IFile>();
+  const [imgPerfil, setImgPerfil] = useState<any>();
   const [tipoArquivo, setTipoArquivo] = useState<iDataSelect[]>([]);
   const [carregou, setCarregou] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  let [upload, setUpload] = useState<UploadCore>()
+
+  const onDone = useCallback(() => {
+    if (props.corretorCadastrando) {
+      console.log('corretor editando')
+      localStorage.removeItem('@appePlus/codClienteEdicao')
+      history.push("/dashboard/corretor/clientes");
+    } else if (props.edicao && !!codCliente && window.location.pathname === '/cadastro/cliente/vendedor') {
+      console.log('corretor  editando cliente')
+      history.push("/dashboard/meus-imoveis");
+    } else if (props.edicao && !!codCliente && window.location.pathname === '/cadastro/vendedor') {
+      console.log('cliente editando')
+      history.push("/dashboard/meus-imoveis");
+    } else {
+      history.push("/cadastro/imovel/anuncioSimples");
+    }
+  }, [])
+
+  const format = useCallback((data: IFile) => {
+    return parse(data.name) + `|0|${data.meta.type}`
+  }, [])
+
+  const meta = useMemo(() => {
+    return {type: 3}
+  }, [])
 
   function handleCpf() {
     if (!validaCpf(cpf) && cpf.length === 11) {
       setMsgErro("CPF inválido !");
       setAlertErro(true);
-      return;
-    }
-
-    if (usuario.tipo == tipoUsuario.corretor && cpf == usuario.cPFCNPJ) {
-      setAlertErro(true);
-      setMsgErro(
-        "Você não pode cadastrar seu proprio CPF."
-      );
-      setCpf("");
-      return;
-    } else {
-      api
-        .get(`/cliente/verificar-cpf-telefone?cpf=${cpf}`)
-        .then((response) => {
-          if (response.data.data > 0) {
-            setAlertErro(true);
-            setMsgErro(
-              "O número de CPF informado já está vinculado a outro usuário da plataforma."
-            );
-            setCpf("");
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
   }
-
   async function GetDadosCliente() {
     await api.get(`cliente/recuperar-dados-cliente?codCliente=${codCliente}`).then(response => {
       console.log(response.data.data)
@@ -191,9 +177,7 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
       res.rg && setRg(res.rg)
       res.codEstadoCivil && setEstadoCivil(String(res.codEstadoCivil))
       res.genero && setSexo(String(res.genero))
-      let newUploadedFiles: IFile;
       res.arquivosCliente.map(async (arquivo: any) => {
-        let count = 0;
         let file: File;
 
         var xhr = new XMLHttpRequest();
@@ -204,29 +188,14 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
         xhr.onload = function (e) {
           if (this.status == 200) {
             file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-            newUploadedFiles = {
-              file,
-              id: String(arquivo.codArquivoCliente),
-              name: arquivo.nomeArquivo,
-              readableSize: filesize(file.size),
-              preview: arquivo.url,
-              progress: 0,
-              uploaded: false,
-              error: false,
-              url: "",
-              codArquivo: String(arquivo.codArquivoCliente),
-              codTipoArquivo: String(arquivo.codTipoArquivo),
-            };
-
 
             if (arquivo.codTipoArquivo == 3) {
-              setUploadedFiles((state) => state.concat(newUploadedFiles));
+              let meta = {type: arquivo.codTipoArquivo}
 
-            } else {
-              setImgPerfil(newUploadedFiles);
+              const content: IFile = { file, meta, name: arquivo.nomeArquivo, id: String(arquivo.codArquivoCliente), progress: 100, preview: URL.createObjectURL(file) }
+
+              upload!.initFiles([content])
             }
-
-            count = count + 1;
           }
         };
         xhr.send();
@@ -253,128 +222,18 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
     if (!!codCliente) {
       GetDadosCliente();
     }
+
+    // if (!carregou) {
+    //   setCarregou(true);
+    // }
+
+
   }, []);
-
-
-
-  function UploadArquivos() {
-
-    const handleUpload = useCallback(
-      (files: File[]) => {
-        files.map((file: File) => {
-          if (!file.name.toLowerCase().includes('.jpg') && !file.name.toLowerCase().includes('.png') && !file.name.toLowerCase().includes('.jpeg')) {
-            setAlertErro(true);
-            setMsgErro('Extensão de arquivo não suportada');
-            return;
-          }
-        })
-
-        const newUploadedFiles: IFile[] = files.map((file: File) => ({
-          file,
-          id: uuidv4(),
-          name: file.name,
-          readableSize: filesize(file.size),
-          preview: URL.createObjectURL(file),
-          progress: 0,
-          uploaded: false,
-          error: false,
-          url: "",
-          codTipoArquivo: "0",
-          codArquivo: "0"
-        }));
-
-        Promise.all(
-          newUploadedFiles.map(
-            upload => minify(upload.file as File)
-              .then(res => upload.file = res)
-          )
-        ).then(() => {
-          setUploadedFiles((state) => state.concat(newUploadedFiles))
-        })
-      },
-      []
-    );
-
-    const onDrop = useCallback(
-      (files) => {
-        handleUpload(files);
-      },
-      [handleUpload]
-    );
-
-    const {
-      getRootProps,
-      getInputProps,
-      isDragActive,
-      isDragReject,
-    } = useDropzone({
-      accept: ["image/jpeg", "image/pjpeg", "image/png", "image/gif"],
-      onDrop,
-    });
-
-    const renderDragMessage = useCallback(() => {
-      if (!isDragActive) {
-        return <UploadMessage>Para upload arraste seus documento para cá ou clique</UploadMessage>;
-      }
-
-      if (isDragReject) {
-        return (
-          <UploadMessage type="error">
-            Tipo de arquivo não suportado
-          </UploadMessage>
-        );
-      }
-
-      return <UploadMessage type="success">Solte os documentos aqui</UploadMessage>;
-    }, [isDragActive, isDragReject]);
-
-    return (
-      <DropContainer {...getRootProps()} style={{ width: "100%", height: `200px`, backgroundColor: `#FAFAFA`, display: "flex", justifyContent: "center" }}>
-        <input {...getInputProps()} />
-        {renderDragMessage()}
-      </DropContainer>
-    );
-  }
-  const deletePreviewPhotoFisica = (id: any) => {
-    const newArray = uploadedFiles.filter((file) => file.id !== id);
-    setUploadedFiles(newArray);
-  };
-
-  const FileListArquivos = () => {
-    return (
-      <Container>
-        <Slider {...settings}>
-          {uploadedFiles.map((uploadedFile: IFile) => (
-            <li key={uploadedFile.id}>
-              <FileInfo>
-                <Preview src={uploadedFile.preview} />
-                <div>
-                  <p style={{ margin: `0`, width: '100px', height: '20px', textOverflow: 'ellipsis', overflow: 'hidden', direction: 'ltr' }}>{uploadedFile.name}</p>
-                  <span style={{ color: `#000` }}>
-                    {uploadedFile.readableSize}{" "}
-                    {!!uploadedFile.preview && (
-                      <button
-                        className="btnExcluir"
-                        onClick={() =>
-                          deletePreviewPhotoFisica(uploadedFile.id)
-                        }
-                      >
-                        x
-                      </button>
-                    )}
-                  </span>
-                </div>
-              </FileInfo>
-            </li>
-          ))}
-        </Slider>
-      </Container>
-    );
-  };
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (
+      !upload!.files.length ||
       rg === "" ||
       cpf === "" ||
       estadoCivil === "" ||
@@ -397,7 +256,7 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
     //   return;
     // }
 
-
+    
     if (props.corretorCadastrando) {
       if (codCliente && window.location.pathname === "/cadastro/cliente/vendedor") {
         console.log('corretor editando cliente')
@@ -427,7 +286,7 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
         Genero: Number(sexo),
       })
       .then((response) => {
-        if (!response.data.success) {
+        if(!response.data.success){
           setAlertErro(true);
           setMsgErro(
             response.data.message
@@ -437,7 +296,7 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
         } else {
           localStorage.setItem("@appePlus/codCliente", response.data.data);
           CadastrarImgPerfil(Number(response.data.data));
-          // setLoading(false);
+          setLoading(false);
         }
       })
       .catch((error) => {
@@ -465,21 +324,13 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
   async function SalvarCliente() {
     setLoading(true);
     let codigoNivel = usuario.nivel;
+   
     if (usuario.nivel === 1) {
       codigoNivel = 3
-    } else if (codigoNivel == null && codNivel == null) {
+    } else if (codigoNivel == null) {
       codigoNivel = 2
     }
-    else if (codigoNivel == null && codNivel == 1) {
-      codigoNivel = 3
-    }
-    else if (codigoNivel == null && codNivel == 2) {
-      codigoNivel = 2
-    }
-    else if (codigoNivel == null && codNivel == 3) {
-      codigoNivel = 3
-    }
-    
+
     await api
       .post("cliente/atualizar-dados-cliente", {
         codCliente: codCliente,
@@ -494,13 +345,10 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
         genero: Number(sexo),
       })
       .then((response) => {
-
-        // console.log(response.data)
         CadastrarImgPerfil(codCliente);
-        // setLoading(false);
-        localStorage.removeItem('@appePlus/codNivelClienteEdicao');
       })
       .catch((error) => {
+        console.log({abc: error})
         console.log("Ocorreu um erro");
         if (error.response?.status === 400) {
           setAlertErro(true);
@@ -512,70 +360,17 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
           setLoading(false);
         }
       });
-
-
   }
 
 
   async function CadastrarImgPerfil(codCliente: number) {
-
     const formData = new FormData();
 
-    let promises: any[] = []
-
     if (props.teste && props?.formFile) {
-      promises.push(minify(props.formFile.file as File).then(result => {
-        formData.append(`FormFile`, result, parse(props.formFile?.name as string) + `|0|13`);
-      }))
-    } else if (imgPerfil?.file) {
-      promises.push(minify(imgPerfil.file as File).then(result => {
-        formData.append(
-          `FormFile`,
-          result,
-          parse(imgPerfil?.name) + `|${imgPerfil?.codArquivo}|13`
-        );
-      }))
-    }
-
-    uploadedFiles.forEach((data, index) => {
-      promises.push(minify(data.file as File).then(result => {
-        formData.append(
-          `FormFile`,
-          result,
-          parse(data.name) + `|${data.codArquivo}|${"3"}`
-        );
-      }));
-    });
-
-
-    Promise.all(promises).then(() => {
+      formData.append(`FormFile`, props.formFile.file, parse(props.formFile.name) + `|0|13`);
       api
         .post(`/arquivoCliente/cadastrar?codCliente=${codCliente}`, formData)
-        .then((response) => {
-          if (props.corretorCadastrando) {
-            console.log('corretor editando')
-            setLoading(false);
-            localStorage.removeItem('@appePlus/codClienteEdicao')
-            history.push("/dashboard/corretor/clientes");
-          } else if (props.edicao && !!codCliente && window.location.pathname === '/cadastro/cliente/vendedor') {
-            console.log('corretor  editando cliente')
-            setLoading(false);
-            history.push("/dashboard/meus-imoveis");
-          } else if (props.edicao && !!codCliente && window.location.pathname === '/cadastro/vendedor') {
-            console.log('cliente editando')
-            setLoading(false);
-            history.push("/dashboard/meus-imoveis");
-          } else {
-            setLoading(false);
-            history.push("/cadastro/imovel/anuncioSimples");
-          }
-        })
-        .catch((error) => {
-          setAlertErro(true);
-          setMsgErro("Favor informar ao menos uma Imagem.");
-          window.scrollTo(0, 0);
-        });
-    })
+    }
   }
 
 
@@ -596,7 +391,7 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
 
   return (
     <>
-      <div className="col-md-6">
+      <div className="col-md-7">
         {alertErro && <Alert msg={msgErro} setAlertErro={setAlertErro} />}
         <p>Insira seu sexo e estado civil atualizados:</p>
         <div className="row">
@@ -690,28 +485,37 @@ const ProfileCadastroUserFisica = (props: IArquivo) => {
         </span>
       </div>
       <div className="row mb-3">
-        <div className="col-md-3">
-          <UploadArquivos></UploadArquivos>
-        </div>
-        <div className="col-md-9">
-          <FileListArquivos></FileListArquivos>
-        </div>
+        <Upload 
+          start={loading} 
+          upload={`/arquivoCliente/cadastrar?codCliente=${codCliente}`}
+          remove={'/arquivoCliente?codArquivo=:id'}
+          format={format}
+          meta={meta}
+          onDone={onDone}
+          onAfterInit={core => {
+            upload = core;
+            setUpload(core)
+          }}
+          />
       </div>
       <div className="col-lg-12 mt-0 pt-4 row-gray text-end">
-        <button className="buttonSalvar" onClick={handleSubmit}>
+        <div
+          className="buttonSalvar"
+          onClick={handleSubmit}
+          style={{float: 'right'}}
+          {...{disabled: loading}}
+        >
+          <a style={{marginRight: '10px'}}>{!loading ? "Salvar edição" : "Salvar"} e continuar</a>
           {loading ? (
-            <>
-              Salvando{" "}
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              />
-            </>
+            <div
+              className="spinner-border spinner-border-sm"
+              role="status"
+              style={{ marginLeft: "0.5rem" }}
+            />
           ) : (
-            <>Salvar e continuar</>
+            <FiSave />
           )}
-        </button>
+        </div>
       </div>
     </>
   );

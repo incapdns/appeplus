@@ -38,7 +38,7 @@ export interface IArquivo {
 }
 
 export interface IArquivos {
-  codArquivoCliente?: number
+  codArquivoCliente?:number
   codArquivoCorretor?: number;
   codTipoArquivo?: number;
   nomeArquivo: string;
@@ -54,19 +54,19 @@ export default function CadastroVendedor() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );
+  
+  var codCliente:any;
 
-  var codCliente: any;
+  if(window.location.pathname === '/cadastro/cliente/vendedor' ||
+     window.location.pathname === '/cadastro/cliente/comprador' ){
+      codCliente = Number(localStorage.getItem('@appePlus/codClienteEdicao')); 
+     }
+     if(window.location.pathname === '/cadastro/vendedor' ||
+     window.location.pathname === '/cadastro/dadosComprador' ){
+      codCliente = usuario.codCliente; 
+     }
 
-  if (window.location.pathname === '/cadastro/cliente/vendedor' ||
-    window.location.pathname === '/cadastro/cliente/comprador') {
-    codCliente = Number(localStorage.getItem('@appePlus/codClienteEdicao'));
-  }
-  if (window.location.pathname === '/cadastro/vendedor' ||
-    window.location.pathname === '/cadastro/dadosComprador') {
-    codCliente = usuario.codCliente;
-  }
-
-
+  
   const location: any = useLocation();
   const [checkedComprarImovel, setCheckedComprarImovel] = useState("");
   const history = useHistory();
@@ -83,7 +83,7 @@ export default function CadastroVendedor() {
   const [uploadedFiles2, setUploadedFiles2] = useState<IFile[]>([]);
   const [imgUserEdit, setUserEdit] = useState("");
   const [userImageEdit, setUserImageEdit] = useState(false);
-  const [teste, setTeste] = useState(false);
+  const [newImgPerfil, setNewImgPerfil] = useState(false);
   let [verificaCampos, setVerificaCampos] = useState<boolean>();
   const [edicao, setEdicao] = useState(location?.state?.edicao);
   const [alertErro, setAlertErro] = useState(false);
@@ -152,176 +152,175 @@ export default function CadastroVendedor() {
     setImgPerfil(newUploadedFiles);
 
     if (!userImageEdit) {
-      setTeste(true);
+      setNewImgPerfil(true);
     }
   }, []);
 
   function getDados() {
-    if (!edicao) {
-      console.log("edicao", edicao)
+    if(!edicao){
+      console.log("edicao",edicao)
       setNome(usuario.nomeCompleto);
       setEmail(usuario.email);
       setTelefone(usuario.telefone);
-    } else {
-      console.log("edicao", edicao)
+    }else{
+      console.log("edicao",edicao)
     }
-
+    
   }
 
   async function GetDataNascimento() {
-    if (usuario.codCorretor !== null) {
+    if(usuario.codCorretor !== null){
       await api
-        .get(`Corretor/buscar?codCorretor=${usuario.codCorretor}`)
-        .then((response) => {
-          const res = response.data.data[0];
-          if (res.dtNascimento) {
-            const dtNascimentoReplace = res.dtNascimento
-              ? res.dtNascimento.substring(
+      .get(`Corretor/buscar?codCorretor=${usuario.codCorretor}`)
+      .then((response) => {
+        const res = response.data.data[0];
+        if (res.dtNascimento) {
+          const dtNascimentoReplace = res.dtNascimento
+            ? res.dtNascimento.substring(
                 0,
                 (res.dtNascimento + " ").indexOf("T")
               )
-              : null;
-            setDtNascimento(dtNascimentoReplace);
-          }
-        })
-        .catch((error) => {
-          console.log("Ocorreu um erro");
-        });
+            : null;
+          setDtNascimento(dtNascimentoReplace);
+        }
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
     }
-
+    
   }
 
   async function GetDadosPessoais() {
-    if (usuario.codCorretor !== null) {
+    if(usuario.codCorretor !== null){
       await api
-        .get(`Corretor/buscar?codCorretor=${usuario.codCorretor}`)
-        .then((response) => {
-          const res = response.data.data[0];
-          res.nomeCompleto && setNome(res.nomeCompleto)
-          res.email && setEmail(res.email)
-          res.telefone && setTelefone(res.telefone)
+      .get(`Corretor/buscar?codCorretor=${usuario.codCorretor}`)
+      .then((response) => {
+        const res = response.data.data[0];
+        res.nomeCompleto && setNome(res.nomeCompleto)
+        res.email && setEmail(res.email)
+        res.telefone && setTelefone(res.telefone)
 
-          let newUploadedFiles: IFile;
-          res.arquivos.map(async (arquivo: IArquivos) => {
-            let count = 0;
-            let file: File;
-            var xhr = new XMLHttpRequest();
-            xhr.responseType = "blob";
-            xhr.open("GET", arquivo.url, true);
-            xhr.setRequestHeader("Accept", "*/*");
-            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-            xhr.onload = function (e) {
-              if (this.status == 200) {
-                file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-                newUploadedFiles = {
-                  file,
-                  id: String(arquivo.codArquivoCorretor),
-                  name: arquivo.nomeArquivo,
-                  readableSize: filesize(file.size),
-                  preview: arquivo.url,
-                  progress: 0,
-                  uploaded: false,
-                  error: false,
-                  url: "",
-                  codArquivo: String(arquivo.codArquivoCorretor),
-                  codTipoArquivo: String(arquivo.codTipoArquivo),
-                };
+        let newUploadedFiles: IFile;
+        res.arquivos.map(async (arquivo: IArquivos) => {
+          let count = 0;
+          let file: File;
+          var xhr = new XMLHttpRequest();
+		  xhr.responseType = "blob";
+          xhr.open("GET", arquivo.url, true);
+          xhr.setRequestHeader("Accept", "*/*");
+          xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+          xhr.onload = function (e) {
+            if (this.status == 200) {
+              file = new File([this.response], arquivo.nomeArquivo, {type: "image/png"});
+              newUploadedFiles = {
+                file,
+                id: String(arquivo.codArquivoCorretor),
+                name: arquivo.nomeArquivo,
+                readableSize: filesize(file.size),
+                preview: arquivo.url,
+                progress: 0,
+                uploaded: false,
+                error: false,
+                url: "",
+                codArquivo: String(arquivo.codArquivoCorretor),
+                codTipoArquivo: String(arquivo.codTipoArquivo),
+              };
 
-                if (
-                  arquivo.codTipoArquivo !== 3 &&
-                  arquivo.codTipoArquivo !== 6
-                ) {
-                  setUserImageEdit(true);
-                  setImgPerfil(newUploadedFiles);
-                }
-                count = count + 1;
+              if (
+                arquivo.codTipoArquivo !== 3 &&
+                arquivo.codTipoArquivo !== 6
+              ) {
+                setUserImageEdit(true);
+                setImgPerfil(newUploadedFiles);
               }
-            };
-            xhr.send();
-          });
-        })
-        .catch((error) => {
-          console.log("Ocorreu um erro");
+              count = count + 1;
+            }
+          };
+          xhr.send();
         });
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
     }
   }
   async function GetDataNascimentoCliente() {
-    if (!!codCliente) {
-      await api
-        .get(`cliente/recuperar-dados-cliente?codCliente=${codCliente}`)
-        .then((response) => {
-          console.log('GetDtNascimento ~ ', response);
-          const res = response.data.data;
-          if (res.dtNascimento) {
-            const dtNascimentoReplace = res.dtNascimento
-              ? res.dtNascimento.substring(
-                0,
-                (res.dtNascimento + " ").indexOf("T")
-              )
-              : null;
-            setDtNascimento(dtNascimentoReplace);
-          }
-        })
-        .catch((error) => {
-          console.log("Ocorreu um erro");
-        });
-    }
+  if(!!codCliente){
+    await api
+    .get(`cliente/recuperar-dados-cliente?codCliente=${codCliente}`)
+    .then((response) => {
+      const res = response.data.data;
+      if (res.dtNascimento) {
+        const dtNascimentoReplace = res.dtNascimento
+          ? res.dtNascimento.substring(
+              0,
+              (res.dtNascimento + " ").indexOf("T")
+            )
+          : null;
+        setDtNascimento(dtNascimentoReplace);
+      }
+    })
+    .catch((error) => {
+      console.log("Ocorreu um erro");
+    });
   }
-  async function GetDadosClienteVendedor() {
+  }
+  async function GetDadosClienteVendedor(){
     await api.get(`cliente/recuperar-dados-cliente?codCliente=${codCliente}`).then(response => {
       // console.log(response.data.data)
       const res = response.data.data;
       res.nomeCompleto && setNome(res.nomeCompleto)
       res.email && setEmail(res.email)
       res.telefone && setTelefone(res.telefone)
-
+      
       let newUploadedFiles: IFile;
-      res.arquivosCliente.map(async (arquivo: IArquivos) => {
-        let count = 0;
-        let file: File;
+        res.arquivosCliente.map(async (arquivo: IArquivos) => {
+          let count = 0;
+          let file: File;
 
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = "blob";
-        xhr.open("GET", arquivo.url, true);
-        xhr.setRequestHeader("Accept", "*/*");
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-        xhr.onload = function (e) {
-          if (this.status == 200) {
-            file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-            newUploadedFiles = {
-              file,
-              id: String(arquivo.codArquivoCliente),
-              name: arquivo.nomeArquivo,
-              readableSize: filesize(file.size),
-              preview: arquivo.url,
-              progress: 0,
-              uploaded: false,
-              error: false,
-              url: "",
-              codArquivo: String(arquivo.codArquivoCliente),
-              codTipoArquivo: String(arquivo.codTipoArquivo),
-            };
+          var xhr = new XMLHttpRequest();
+		  xhr.responseType = "blob";
+          xhr.open("GET", arquivo.url, true);
+          xhr.setRequestHeader("Accept", "*/*");
+          xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+          xhr.onload = function (e) {
+            if (this.status == 200) {
+              file = new File([this.response], arquivo.nomeArquivo, {type: "image/png"});
+              newUploadedFiles = {
+                file,
+                id: String(arquivo.codArquivoCliente),
+                name: arquivo.nomeArquivo,
+                readableSize: filesize(file.size),
+                preview: arquivo.url,
+                progress: 0,
+                uploaded: false,
+                error: false,
+                url: "",
+                codArquivo: String(arquivo.codArquivoCliente),
+                codTipoArquivo: String(arquivo.codTipoArquivo),
+              };
 
 
-            if (
-              arquivo.codTipoArquivo !== 3 &&
-              arquivo.codTipoArquivo !== 6
-            ) {
-              setUserImageEdit(true);
-              setImgPerfil(newUploadedFiles);
+              if (
+                arquivo.codTipoArquivo !== 3 &&
+                arquivo.codTipoArquivo !== 6
+              ) {
+                setUserImageEdit(true);
+                setImgPerfil(newUploadedFiles);
+              }
+
+              count = count + 1;
             }
-
-            count = count + 1;
-          }
-        };
-        xhr.send();
-      });
-    }).catch(error => {
+          };
+          xhr.send();
+        });
+    }).catch(error =>{
       console.log(error)
     })
   }
 
-  async function GetDadosClienteComprador() {
+  async function GetDadosClienteComprador(){
     await api.get(`cliente/recuperar-dados-cliente?codCliente=${codCliente}`).then(response => {
       // console.log(response.data.data)
       const res = response.data.data;
@@ -329,49 +328,49 @@ export default function CadastroVendedor() {
       res.nomeCompleto && setNome(res.nomeCompleto)
       res.email && setEmail(res.email)
       res.telefone && setTelefone(res.telefone)
-
+      
       let newUploadedFiles: IFile;
-      res.arquivosCliente.map(async (arquivo: IArquivos) => {
-        let count = 0;
-        let file: File;
+        res.arquivosCliente.map(async (arquivo: IArquivos) => {
+          let count = 0;
+          let file: File;
 
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = "blob";
-        xhr.open("GET", arquivo.url, true);
-        xhr.setRequestHeader("Accept", "*/*");
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-        xhr.onload = function (e) {
-          if (this.status == 200) {
-            file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-            newUploadedFiles = {
-              file,
-              id: String(arquivo.codArquivoCliente),
-              name: arquivo.nomeArquivo,
-              readableSize: filesize(file.size),
-              preview: arquivo.url,
-              progress: 0,
-              uploaded: false,
-              error: false,
-              url: "",
-              codArquivo: String(arquivo.codArquivoCliente),
-              codTipoArquivo: String(arquivo.codTipoArquivo),
-            };
+          var xhr = new XMLHttpRequest();
+		  xhr.responseType = "blob";
+          xhr.open("GET", arquivo.url, true);
+          xhr.setRequestHeader("Accept", "*/*");
+          xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+          xhr.onload = function (e) {
+            if (this.status == 200) {
+              file = new File([this.response], arquivo.nomeArquivo, {type: "image/png"});
+              newUploadedFiles = {
+                file,
+                id: String(arquivo.codArquivoCliente),
+                name: arquivo.nomeArquivo,
+                readableSize: filesize(file.size),
+                preview: arquivo.url,
+                progress: 0,
+                uploaded: false,
+                error: false,
+                url: "",
+                codArquivo: String(arquivo.codArquivoCliente),
+                codTipoArquivo: String(arquivo.codTipoArquivo),
+              };
 
 
-            if (
-              arquivo.codTipoArquivo !== 3 &&
-              arquivo.codTipoArquivo !== 6
-            ) {
-              setUserImageEdit(true);
-              setImgPerfil(newUploadedFiles);
+              if (
+                arquivo.codTipoArquivo !== 3 &&
+                arquivo.codTipoArquivo !== 6
+              ) {
+                setUserImageEdit(true);
+                setImgPerfil(newUploadedFiles);
+              }
+
+              count = count + 1;
             }
-
-            count = count + 1;
-          }
-        };
-        xhr.send();
-      });
-    }).catch(error => {
+          };
+          xhr.send();
+        });
+    }).catch(error =>{
       console.log(error)
     })
   }
@@ -383,7 +382,7 @@ export default function CadastroVendedor() {
           .get(`api/Usuario/validar-email-telefone?Email=${email}`)
           .then((response) => {
             verificaCampos = response.data.data;
-
+            
             if (verificaCampos) {
               setAlertErro(true);
               setMsgErro(
@@ -397,38 +396,22 @@ export default function CadastroVendedor() {
       }
     }
   }
-
   function verificaInputsTel() {
-    if (telefone !== "") {
-      const tel = revertMask(telefone);
-      if (checkedComprarImovel == "comprador" || checkedComprarImovel == "vendedor") {
+    if (corretorCadastrando) {
+      if (telefone !== "") {
+        const tel = revertMask(telefone);
+        
         api
-          .get(`/cliente/verificar-cpf-telefone?telefone=${tel}&codCliente=${usuario.codCliente}`)
+          .get(`api/Usuario/validar-email-telefone?Telefone=${tel}`)
           .then((response) => {
-            if (response.data.data > 0) {
+            verificaCampos = response.data.data;
+            
+            if (verificaCampos) {
               setAlertErro(true);
               setMsgErro(
                 "O número de telefone informado já está vinculado a outro usuário da plataforma."
               );
-              setTelefone("");
-              return;
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        console.log('Passou aqui 6');
-        api
-          .get(`/corretor/verificar-cpf-telefone?telefone=${tel}&codCorretor=${usuario.codCorretor}`)
-          .then((response) => {
-            if (response.data.data > 0) {
-              setAlertErro(true);
-              setMsgErro(
-                "O número de telefone informado já está vinculado a outro usuário da plataforma."
-              );
-              setTelefone("");
-              return;
+            } else {
             }
           })
           .catch((error) => {
@@ -437,8 +420,6 @@ export default function CadastroVendedor() {
       }
     }
   }
-
-
 
   useEffect(() => {
     caminho();
@@ -450,34 +431,34 @@ export default function CadastroVendedor() {
     } else {
       getDados();
       GetDataNascimento();
-
+      
     }
     window.scrollTo(0, 0);
   }, [imgPerfil, email, nome, telefone, corretorCadastrando]);
 
   useEffect(() => {
-    if (!!codCliente && window.location.pathname === "/cadastro/cliente/vendedor") {
+    if(!!codCliente && window.location.pathname === "/cadastro/cliente/vendedor"){
       GetDadosClienteVendedor()
-
+      
     }
-    if (!!codCliente && window.location.pathname === "/cadastro/cliente/comprador") {
+    if(!!codCliente && window.location.pathname === "/cadastro/cliente/comprador"){
       GetDadosClienteComprador()
-
+      
     }
-    if (window.location.pathname === "/cadastro/dadosCorretor") {
+    if(window.location.pathname === "/cadastro/dadosCorretor"){
       GetDadosPessoais();
     }
-    if (window.location.pathname === "/cadastro/dadosComprador") {
+    if(window.location.pathname === "/cadastro/dadosComprador"){
       GetDadosClienteComprador();
       GetDataNascimentoCliente();
     }
-    if (window.location.pathname === "/cadastro/vendedor") {
+    if(window.location.pathname === "/cadastro/vendedor"){
       GetDadosClienteVendedor();
       GetDataNascimentoCliente();
     }
-
-
-
+    
+    
+    
   }, []);
 
   return (
@@ -543,7 +524,7 @@ export default function CadastroVendedor() {
                       onChange={(event) => {
                         setNome(event.target.value);
                       }}
-
+                      
                       placeholder="Nome"
                     />
                   </div>
@@ -557,7 +538,7 @@ export default function CadastroVendedor() {
                       onChange={(event) => {
                         setEmail(event.target.value);
                       }}
-                      disabled={!corretorCadastrando}
+                      disabled
                       placeholder="Email"
                     />
                   </div>
@@ -574,6 +555,7 @@ export default function CadastroVendedor() {
                       onChange={(event) => {
                         setTelefone(event.target.value);
                       }}
+                      
                       placeholder="Telefone Celular"
                     />
                   </div>
@@ -683,7 +665,7 @@ export default function CadastroVendedor() {
                       verificaCampos={verificaCampos}
                       corretorCadastrando={corretorCadastrando}
                       formFile={imgPerfil}
-                      teste={teste}
+                      teste={newImgPerfil}
                       nomeSocial={nome}
                       dtNascimento={dtnascimento}
                       email={email}
@@ -700,10 +682,9 @@ export default function CadastroVendedor() {
               {checkedComprarImovel == "corretor" && (
                 <ProfileCadastroUserCorretor
                   formFile={imgPerfil}
-                  teste={teste}
+                  newImgPerfil={newImgPerfil}
                   nomeSocial={nome}
                   dtNascimento={dtnascimento}
-                  telefone={telefone}
                 />
               )}
               {checkedComprarImovel == "comprador" && (

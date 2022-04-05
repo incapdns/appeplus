@@ -1,4 +1,4 @@
-import { useState, FormEvent, useCallback, useRef, useEffect } from "react";
+import { useState, FormEvent, useRef, useEffect, useMemo } from "react";
 import Footer from "../../../components/Footer";
 import Navbar from "../../../components/Navbar";
 import "../../../styles/anuncioimovel.scss";
@@ -8,54 +8,22 @@ import { FaTree } from "react-icons/fa";
 import {
   moeda,
   moedaFloat,
-  dateNascMask,
   cepMask,
   revertMask
 } from "../../../utils/Masks";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import filesize from "filesize";
-import { useDropzone } from "react-dropzone";
 import api from "../../../services/api";
-import {
-  Container,
-  FileInfo,
-  Preview,
-  DropContainer,
-  UploadMessage,
-} from "../../../styles/components/Form/vender-arquivos";
 import StepperAnuncioImovel from "../../../components/StepperAnuncioImovel";
 import { useHistory } from "react-router-dom";
-import { iDadosUsuario, tipoUsuario } from "../../../@types";
-import Loader from "../../../components/Loader";
+import { iDadosUsuario } from "../../../@types";
 import Alert from "../../../components/Alert";
-import {
-  RiArrowRightCircleFill,
-  RiArrowLeftCircleFill,
-  RiContactsBookLine,
-} from "react-icons/ri";
 import Geocode from "react-geocode";
-import { MdOutlineDataUsage } from "react-icons/md";
-import minify from "../../../utils/minify";
 import parse from '../../../utils/parse'
-
-
-export interface IFile {
-  id: string;
-  name: string;
-  readableSize: string;
-  uploaded?: boolean;
-  preview: string;
-  file: File | Blob | string;
-  progress?: number;
-  error?: boolean;
-  url: string;
-  codArquivo: string;
-  codTipoArquivo: string;
-}
+import Upload, { IFile } from "../../../components/UploadArquivos/Upload";
+import { FiSave } from "react-icons/fi";
+import { Upload as UploadCore } from "../../../components/UploadArquivos/core/Upload";
 
 export interface IArquivos {
   codArquivoImovel?: number;
@@ -70,67 +38,6 @@ interface iDataSelect {
 }
 
 export default function AnuncioSimples() {
-  function SampleNextArrow(props: any) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block" }}
-        onClick={onClick}
-      >
-        <RiArrowRightCircleFill size={22} />
-      </div>
-    );
-  }
-
-  function SamplePrevArrow(props: any) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block" }}
-        onClick={onClick}
-      >
-        <RiArrowLeftCircleFill size={22} />
-      </div>
-    );
-  }
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 300,
-    slidesToShow: 2,
-    slidesToScroll: 2,
-    arrows: true,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
   const history = useHistory();
   const [loading, setLoading] = useState(false);
 
@@ -144,7 +51,6 @@ export default function AnuncioSimples() {
   const [cidade, setCidade] = useState("");
   const [bairro, setBairro] = useState("");
   const [uf, setUf] = useState("");
-  let [corretorSelecionado, setCorretorSelecionado] = useState(0);
   const [numero, setNumero] = useState("");
   const [boolNumero, setBoolNumero] = useState(false);
   const [complemento, setComplemento] = useState("");
@@ -165,16 +71,33 @@ export default function AnuncioSimples() {
   const [imovelOcupado, setImovelOcupado] = useState(false);
   const [bemPartePagamento, setBemPartePagamento] = useState(false);
   const [descComplementar, setDescComplementar] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
-  const [stepLocalizacao, setStepLocalizacao] = useState(true);
-  const [stepSobre, setStepSobre] = useState(false);
-  const [stepImagens, setStepImagens] = useState(false);
-  const [scrollBox, setScrollBox] = useState(true);
   const [tipos, setTipos] = useState<iDataSelect[]>([]);
-  const [tipoArquivo, setTipoArquivo] = useState<iDataSelect[]>([]);
-  const [arquivos, setArquivos] = useState<IArquivos[]>([]);
   const [latitude, setLatitude] = useState<number>();
   const [longitude, setLongitude] = useState<number>();
+
+  const [startUpload, setStartUpload] = useState<boolean>(false)
+  const [initFiles, setInitFiles] = useState<IFile[]>([])
+  const [upload, setUpload] = useState<UploadCore>()
+
+  const status: any = {}
+
+  Object.defineProperty(status, 'errors', {
+    get: () => upload?.getErrors() ?? []
+  })
+
+  const onDone = () => {
+    if(!status.errors.length)
+      history.push("/cadastro/imovel/anuncioAzul/corretor")
+  }
+
+  const format = (data: IFile) => {
+    return parse(data.name) + `|0|${data.meta.type}`
+  }
+
+  const meta = useMemo(() => {
+    return {type: 1}
+  }, [])
+
   Geocode.setApiKey("AIzaSyAaN_-TgWVG8wcNwPLtFv8af2iJ-zIZfKU");
   let codCliente = Number(localStorage.getItem("@appePlus/codCliente"));
   const codImovel = Number(localStorage.getItem("@appePlus/codImovel"));
@@ -193,7 +116,6 @@ export default function AnuncioSimples() {
   useEffect(() => {
     checaUsuarioLogado();
     window.scrollTo(0, 0);
-    GetTipoArquivo();
     GetAnuncioSimples();
     GetTipos();
     if (usuario.codCliente !== 0 && usuario.codCliente) {
@@ -236,33 +158,27 @@ export default function AnuncioSimples() {
     }
   }
 
-  function complete_localizacao() {
-    setStepLocalizacao(true);
-  }
-
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    console.log(uploadedFiles);
 
-    setAlertErro(false);
+    let errors = status.errors
 
-    if (uploadedFiles.length == 0){
-      setAlertErro(true);
-      setMsgErro("Favor informar as imagens do seu imóvel.");
-      window.scrollTo(0, 0);
+    if(errors.length){
+      upload!.slideTo(errors[0])
       return;
     }
 
-    if (tipoImovel === 0 || cep === '' || endereco === '' || numero === '' || uf === '' || cidade === '' || bairro === '' || valor === ''
-      || area === 0 || valorIptu === '') {
+    setLoading(true)
 
+    setAlertErro(false);
+
+    if (tipoImovel === 0 || cep === '' || endereco === '' || numero === '' || uf === '' || cidade === '' || bairro === '' || valor === ''
+      || area === 0 || pavimentos === 0 || valorIptu === '') {
       setAlertErro(true);
       setMsgErro("Você precisa preencher todos os campos obrigatórios. (*)");
       window.scrollTo(0, 0);
       return;
     }
-
-    setLoading(true);
 
     api
       .post("imovel/anuncio-simples", {
@@ -302,50 +218,11 @@ export default function AnuncioSimples() {
       .then((response) => {
         localStorage.setItem("@appePlus/codImovel", response.data.data);
         localStorage.setItem("@appePlus/tipoImovel", String(tipoImovel));
-        CadastrarArquivos(response.data.data);
-        if (usuario.tipo === tipoUsuario.corretor) {
-          corretorSelecionado = usuario.codCorretor;
-          setCorretorSelecionado(usuario.codCorretor);
-          salvarCorretor();
-        }
+        setStartUpload(true);
       })
       .catch((error) => {
         setLoading(false);
         console.log("Ocorreu um erro");
-      });
-  }
-
-  async function salvarCorretor() {
-    api
-      .put(
-        `/imovel/atualizarCorretor?codImovel=${codImovel}&codCorretorVendedor=${corretorSelecionado}`
-      )
-      .then((response) => {
-      })
-      .catch((error) => {
-        console.log("🚀 ~ Error ~ line 318 ~ AnuncioSimples.tsx ~ CorretorCadastrando ~ ", error);
-      });
-  }
-
-  async function CadastrarArquivos(codimovel: number) {
-    const formData = new FormData();
-    uploadedFiles.forEach((data, index) => {
-      formData.append(
-        `FormFile`,
-        data.file,
-        parse(data.name) + `|${data.codArquivo}|${"1"}`
-      );
-    });
-    api
-      .post(`arquivoImovel/cadastrar?codImovel=${codimovel}`, formData)
-      .then((response) => {
-        history.push("/cadastro/imovel/anuncioAzul/corretor");
-        setLoading(false);
-      })
-      .catch((error) => {
-        setAlertErro(true);
-        setLoading(false);
-        setMsgErro("Favor informar ao menos uma Imagem.");
       });
   }
 
@@ -382,8 +259,6 @@ export default function AnuncioSimples() {
 
   async function GetAnuncioSimples() {
     if (codImovel != 0) {
-      setLoading(true);
-      setUploadedFiles([]);
       await api
         .get(`/imovel/recuperar-anuncio-simples?CodImovel=${codImovel}`)
         .then((response) => {
@@ -414,7 +289,6 @@ export default function AnuncioSimples() {
           setImovelOcupado(response.data.data.imovelOcupado);
           setBemPartePagamento(response.data.data.bemPartePagamento);
           setDescComplementar(response.data.data.descComplementar);
-          setArquivos(response.data.data.imagensImovel);
           setTipoImovel(response.data.data.codTipoImovel);
           setFinalidade(response.data.data.codFinalidade);
           finalidade = response.data.data.codFinalidade;
@@ -435,9 +309,7 @@ export default function AnuncioSimples() {
             GetTipos();
           }
           localStorage.setItem("@appePlus/tipoImovel", String(response.data.data.codTipoImovel));
-          let newUploadedFiles: IFile;
           response.data.data.imagensImovel.map(async (arquivo: IArquivos) => {
-            let count = 0;
             let file: File;
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
@@ -447,21 +319,12 @@ export default function AnuncioSimples() {
             xhr.onload = function (e) {
               if (this.status == 200) {
                 file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-                newUploadedFiles = {
-                  file,
-                  id: String(arquivo.codArquivoImovel),
-                  name: arquivo.nomeArquivo,
-                  readableSize: filesize(file.size),
-                  preview: arquivo.url,
-                  progress: 0,
-                  uploaded: false,
-                  error: false,
-                  url: "",
-                  codArquivo: String(arquivo.codArquivoImovel),
-                  codTipoArquivo: String(arquivo.codTipoArquivo),
-                };
-                setUploadedFiles((state) => state.concat(newUploadedFiles));
-                count = count + 1;
+
+                let meta = {type: arquivo.codTipoArquivo}
+
+                const content: IFile = { file, meta, name: arquivo.nomeArquivo, id: String(arquivo.codArquivoImovel), progress: 100, preview: URL.createObjectURL(file) }
+
+                setInitFiles([content])
               }
             };
             xhr.send();
@@ -488,156 +351,12 @@ export default function AnuncioSimples() {
       });
   }
 
-  async function GetTipoArquivo() {
-    await api
-      .get(`tipoArquivo/buscar/autoComplete`)
-      .then((response) => {
-        setTipoArquivo(response.data.data);
-      })
-      .catch((error) => {
-        console.log("Ocorreu um erro");
-      });
-  }
-
-  function UploadArquivos() {
-    const handleUpload = useCallback((files: File[]) => {
-
-      files.map((file: File) => {
-        if (
-          !file.name.toLowerCase().includes(".jpg") &&
-          !file.name.toLowerCase().includes(".png") &&
-          !file.name.toLowerCase().includes(".jpeg")
-        ) {
-          setAlertErro(true);
-          setMsgErro("Extensão de arquivo não suportada");
-          return;
-        }
-      });
-
-      const newUploadedFiles: IFile[] = files.map((file: File) => ({
-        file,
-        id: uuidv4(),
-        name: file.name,
-        readableSize: filesize(file.size),
-        preview: URL.createObjectURL(file),
-        progress: 0,
-        uploaded: false,
-        error: false,
-        url: "",
-        codArquivo: "0",
-        codTipoArquivo: "0",
-      }))
-
-      Promise.all(
-        newUploadedFiles.map(
-          upload => minify(upload.file as File)
-            .then(res => upload.file = res)
-        )
-      ).then(() => {
-        setUploadedFiles((state) => state.concat(newUploadedFiles))
-      })
-    }, []);
-    const onDrop = useCallback(
-      (files) => {
-        handleUpload(files);
-      },
-      [handleUpload]
-    );
-
-    const { getRootProps, getInputProps, isDragActive, isDragReject } =
-      useDropzone({
-        accept: ["image/jpeg", "image/pjpeg", "image/png", "image/gif"],
-        onDrop,
-      });
-
-    const renderDragMessage = useCallback(() => {
-      if (!isDragActive) {
-        return (
-          <UploadMessage className="mx-1">
-            Coloque aqui <br />
-            as melhores imagens do seu imovel
-          </UploadMessage>
-        );
-      }
-
-      if (isDragReject) {
-        return (
-          <UploadMessage type="error">
-            Tipo de arquivo não suportado
-          </UploadMessage>
-        );
-      }
-
-      return (
-        <UploadMessage type="success">Solte os documentos aqui</UploadMessage>
-      );
-    }, [isDragActive, isDragReject]);
-
-    return (
-      <DropContainer
-        {...getRootProps()}
-        style={{
-          width: "100%",
-          height: `200px`,
-          backgroundColor: `#FAFAFA`,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <input {...getInputProps()} />
-        {renderDragMessage()}
-      </DropContainer>
-    );
-  }
-
-  const deletePreviewPhotoJuridica = (id: any) => {
-    const newArray = uploadedFiles.filter((file) => file.id !== id);
-    setUploadedFiles(newArray);
-  };
-
-  const FileListArquivos = () => {
-    return (
-      <Container>
-        <Slider {...settings}>
-          {uploadedFiles.map((uploadedFile: IFile) => (
-            <li key={uploadedFile.id}>
-              <FileInfo>
-                <Preview src={uploadedFile.preview} />
-                <div>
-                  <p style={{ margin: `0`, width: '100px', height: '20px', textOverflow: 'ellipsis', overflow: 'hidden', direction: 'ltr' }} >{uploadedFile.name}</p>
-                  <span style={{ color: `#000` }}>
-                    {uploadedFile.readableSize}{" "}
-                    {!!uploadedFile.preview && (
-                      <button
-                        className="btnExcluir"
-                        onClick={() => {
-                          deletePreviewPhotoJuridica(uploadedFile.id);
-                        }}
-                      >
-                        x
-                      </button>
-                    )}
-                  </span>
-                </div>
-              </FileInfo>
-            </li>
-          ))}
-        </Slider>
-      </Container>
-    );
-  };
-
   return (
     <>
       <Navbar type="dark" />
       <div className="mt-5"></div>
       <div className="container mt-5 col-lg-12 mb-5">
-        {loading ? (
-          <div id="loading" className="divLoad">
-            <Loader />
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="row g-3 col-lg-9">
+          <form onSubmit={event => event.preventDefault()} className="row g-3 col-lg-9">
             <div className="wrapper">
               <ol className="c-stepper">
                 <li className="c-stepper__item">
@@ -1609,24 +1328,40 @@ export default function AnuncioSimples() {
                       </span>
                     </div>
                     <div className="row mb-3">
-                      <div className="col-md-3">
-                        <UploadArquivos></UploadArquivos>
-                      </div>
-                      <div className="col-md-9">
-                        <FileListArquivos></FileListArquivos>
-                      </div>
+                      <Upload 
+                        start={startUpload} 
+                        upload={`/arquivoImovel/cadastrar?codImovel=${codImovel}`}
+                        remove={'/arquivoImovel?codArquivo=:id'}
+                        initFiles={initFiles}
+                        format={format}
+                        meta={meta}
+                        onDone={onDone}
+                        onAfterInit={setUpload}/>
                     </div>
                   </div>
                 </li>
               </ol>
             </div>
             <div className="col-lg-12 mt-0 pt-4 row-gray text-end">
-              <button className="buttonSalvar" onClick={handleSubmit}>
-                Salvar e continuar
-              </button>
+              <div
+                className="buttonSalvar"
+                onClick={handleSubmit}
+                style={{float: 'right'}}
+                {...{disabled: loading}}
+              >
+                <a style={{marginRight: '10px'}}>{!loading ? "Salvar edição" : "Salvar"} e continuar</a>
+                {loading ? (
+                  <div
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    style={{ marginLeft: "0.5rem" }}
+                  />
+                ) : (
+                  <FiSave />
+                )}
+              </div>
             </div>
           </form>
-        )}
         <div className="div-card-stepper-contain col-lg-3">
           <StepperAnuncioImovel codImovel={codImovel} />
         </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, FormEvent, useEffect } from 'react'
+import { useState, useCallback, useRef, FormEvent, useEffect, useMemo } from 'react'
 import '../../../styles/components/Form/profileCadastroUser.scss';
 import { v4 as uuidv4 } from "uuid";
 import filesize from "filesize";
@@ -19,8 +19,9 @@ import { iDadosUsuario, iDataSelect } from '../../../@types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import minify from '../../../utils/minify';
 import parse from '../../../utils/parse';
-
-
+import Upload, { IFile } from '../../UploadArquivos/Upload';
+import { Upload as UploadCore } from "../../UploadArquivos/core/Upload"
+import { FiSave } from 'react-icons/fi';
 
 interface iStep {
   setStep: (value: number) => void;
@@ -28,25 +29,11 @@ interface iStep {
   step: number;
   idImovel?: number | unknown;
 }
-export interface IFile {
-  id: string;
-  name: string;
-  readableSize: string;
-  uploaded?: boolean;
-  preview: string;
-  file: File | Blob | string;
-  progress?: number;
-  error?: boolean;
-  url: string;
-  codArquivo: string;
-  codTipoArquivo: string;
-}
 export interface IArquivo {
-  formFile: IFile | undefined;
+  formFile: any | undefined;
   nomeSocial: string;
   dtNascimento: string;
-  teste: boolean;
-  telefone: string;
+  newImgPerfil: any;
 }
 
 export interface IArquivos {
@@ -64,8 +51,8 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
 
   const history = useHistory();
   const [nacionalidade, setNacionalidade] = useState('');
-  const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([]);
-  const [uploadedFiles2, setUploadedFiles2] = useState<IFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const [uploadedFiles2, setUploadedFiles2] = useState<any[]>([]);
   const [cpf, setCpf] = useState('');
   const [rg, setRg] = useState('');
   const [cep, setCep] = useState('');
@@ -85,12 +72,46 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
   const [alertErro, setAlertErro] = useState(false);
   const [msgErro, setMsgErro] = useState('');
   const insertFocus = useRef<HTMLInputElement>(null);
-  const [imgPerfil, setImgPerfil] = useState<IFile>();
-  const [codigo, setCodigo] = useState('0')
-  let [verificaNumeroCreci, setVerificaNumeroCreci] = useState<boolean>()
 
   const [loading, setLoading] = useState(false);
-  const codCorretor = Number(localStorage.getItem('@appePlus/codCorretor'));
+
+  const [done, setDone] = useState<boolean[]>([])
+
+  let [uploads, setUploads] = useState<UploadCore[]>([])
+
+  const initUpload = (index: number) => {
+    return (upload: UploadCore) => {
+      setUploads(prev => {
+        prev[index] = uploads[index] = upload
+        return prev
+      })
+    }
+  }
+
+  const getUpload = (index: number) => {
+    return uploads[index]
+  }
+
+  const onDone = useCallback(() => {
+    setDone(prev => prev.concat(true))
+  }, [])
+
+  useEffect(() => {
+    if(done.length == 2)
+      history.push('/cadastro/corretor/sobre-voce')
+  }, [done])
+
+  const format = useCallback((data: IFile) => {
+    return parse(data.name) + `|0|${data.meta.type}`
+  }, [])
+
+  const meta1 = useMemo(() => {
+    return {type: 3}
+  }, [])
+
+  const meta2 = useMemo(() => {
+    return {type:  6}
+  }, [])
 
   const settings = {
     dots: false,
@@ -129,7 +150,7 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
   function verificaCreci() {
 
     api.get(`/Corretor/validar-corretor?NumeroCreci=${numeroCreci}`).then(response => {
-      verificaNumeroCreci = response.data.data;
+      let verificaNumeroCreci = response.data.data;
       if (verificaNumeroCreci) {
         setAlertErro(true)
         setMsgErro('O número Creci já está registrado em nome de outro corretor.')
@@ -141,10 +162,7 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
     })
   }
 
-
-
   useEffect(() => {
-    setImgPerfil(props.formFile);
     GetDadosPessoais();
     GetComoConheceu();
   }, [])
@@ -167,9 +185,8 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
         }
         res.codOrigemCadastro && setComoConheceu(res.codOrigemCadastro);
         res.complemento && setComplemento(res.complemento);
-        let newUploadedFiles: IFile;
+        
         res.arquivos.map(async (arquivo: IArquivos) => {
-          let count = 0;
           let file: File;
 
           var xhr = new XMLHttpRequest();
@@ -180,30 +197,15 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
           xhr.onload = function (e) {
             if (this.status == 200) {
               file = new File([this.response], arquivo.nomeArquivo, { type: "image/png" });
-              newUploadedFiles = {
-                file,
-                id: String(arquivo.codArquivoCorretor),
-                name: arquivo.nomeArquivo,
-                readableSize: filesize(file.size),
-                preview: arquivo.url,
-                progress: 0,
-                uploaded: false,
-                error: false,
-                url: "",
-                codArquivo: String(arquivo.codArquivoCorretor),
-                codTipoArquivo: String(arquivo.codTipoArquivo),
-              };
 
+              let meta = {type: arquivo.codTipoArquivo}
 
-              if (arquivo.codTipoArquivo == 3) {
-                setUploadedFiles((state) => state.concat(newUploadedFiles));
-              } else if (arquivo.codTipoArquivo == 6) {
-                setUploadedFiles2((state) => state.concat(newUploadedFiles));
-              } else {
-                setImgPerfil(newUploadedFiles);
-              }
+              const content: IFile = { file, meta, name: arquivo.nomeArquivo, id: String(arquivo.codArquivoCorretor), progress: 100, preview: URL.createObjectURL(file) }
 
-              count = count + 1;
+              if (arquivo.codTipoArquivo == 3)
+                getUpload(0).initFiles([content])
+              else if (arquivo.codTipoArquivo == 6)
+                getUpload(1).initFiles([content])
             }
           };
           xhr.send();
@@ -216,8 +218,10 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    setLoading(true)
-    if (cpf === '' || rg === '' || cep === '' || endereco === '' || cidade === '' || bairro === ''
+
+    CadastrarImgPerfil()
+
+    if (getUpload(0).files.length == 0 || getUpload(1).files.length == 0  || cpf === '' || rg === '' || cep === '' || endereco === '' || cidade === '' || bairro === ''
       || uf === '' || ufEmissao === '' || comoConheceu === '' || numeroCreci === '' || token === '' || numeroEndereco === '' || props.nomeSocial === "" ||
       props.dtNascimento === "") {
       setAlertErro(true);
@@ -225,8 +229,10 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
       setMsgErro('Você precisa preencher todos os campos obrigatórios. (*)');
       window.scrollTo(0, 0);
       return;
-    }
-    if (props?.formFile) {
+    } else if (props?.formFile) {
+      uploads.forEach(upload => {
+        upload?.start()
+      })
       await api.put('Corretor/update', {
         "NomeSocial": props.nomeSocial,
         "DtNascimento": props.dtNascimento,
@@ -243,8 +249,7 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
         "UF": uf,
         "CodCorretor": usuario.codCorretor,
         "tokenCadastro": token,
-        "codOrigemCadastro": comoConheceu,
-        "Telefone": props.telefone
+        "codOrigemCadastro": comoConheceu
       })
         .then(response => {
           CadastrarImgPerfil();
@@ -265,59 +270,22 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
   }
 
   async function CadastrarImgPerfil() {
-    const formData = new FormData();
+    if (props.newImgPerfil && props?.formFile) {
+      let formData = new FormData()
 
-    let promises: any[] = [];
-
-    if (props.teste && props?.formFile) {
-      promises.push(minify(props.formFile.file as File).then(result => {
+      minify(props.formFile.file as File).then(result => {
         formData.append(`FormFile`, result, parse(props.formFile?.name as string) + `|0|13`);
-      }))
-    } else if (imgPerfil?.file) {
-      promises.push(minify(imgPerfil.file as File).then(result => {
-        formData.append(
-          `FormFile`,
-          result,
-          parse(imgPerfil?.name) + `|${imgPerfil?.codArquivo}|13`
-        );
-      }))
-    }
-    uploadedFiles.forEach((data, index) => {
-      promises.push(minify(data.file as File).then(result => {
-        formData.append(
-          `FormFile`,
-          result,
-          parse(data.name) +
-          `|${data.codArquivo}|${"3"}`
-        );
-      }));
-    });
 
-    uploadedFiles2.forEach((data, index) => {
-      promises.push(minify(data.file as File).then(result => {
-        formData.append(
-          `FormFile`,
-          result,
-          parse(data.name) +
-          `|${data.codArquivo}|${"6"}`
-        );
-      }));
-    });
-
-    Promise.all(promises).then(() => {
-      api.post(`/arquivos-corretor/cadastrar?codCorretor=${usuario.codCorretor}`,
-        formData
-      )
-        .then(response => {
+        api.post(`/arquivos-corretor/cadastrar?codCorretor=${usuario.codCorretor}`,
+          formData
+        ).then(response => {
           console.log(response.data);
-          history.push('/cadastro/corretor/sobre-voce')
-
-        })
-        .catch(error => {
+        }).catch(() => {
           setAlertErro(true);
           setMsgErro('Houve um erro ao tentar efetuar o seu cadastro. Tente novamente mais tarde.');
         })
-    })
+      })
+    } 
   }
 
 
@@ -380,24 +348,7 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
     if (!validaCpf(cpf) || cpf.length !== 11) {
       setMsgErro("CPF inválido !")
       setAlertErro(true)
-      return;
     }
-
-    api
-      .get(`/corretor/verificar-cpf-telefone?cpf=${cpf}`)
-      .then((response) => {
-        if (response.data.data > 0) {
-          setAlertErro(true);
-          setMsgErro(
-            "O número de CPF informado já está vinculado a outro usuário da plataforma."
-          );
-          setCpf("");
-          return;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   async function handleCepEdicao(GetCep: string) {
@@ -427,154 +378,6 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
     }
 
   }
-  function UploadArquivos() {
-    const handleUpload = useCallback(
-      (files: File[]) => {
-        files.map((file: File) => {
-          if (!file.name.toLowerCase().includes('.jpg') && !file.name.toLowerCase().includes('.png') && !file.name.toLowerCase().includes('.jpeg')) {
-            setAlertErro(true);
-            setMsgErro('Extensão de arquivo não suportada');
-            return;
-          }
-        })
-
-        const newUploadedFiles: IFile[] = files.map((file: File) => ({
-          file,
-          id: uuidv4(),
-          name: file.name,
-          readableSize: filesize(file.size),
-          preview: URL.createObjectURL(file),
-          progress: 0,
-          uploaded: false,
-          error: false,
-          url: "",
-          codTipoArquivo: "0",
-          codArquivo: "0"
-        }));
-
-        Promise.all(
-          newUploadedFiles.map(
-            upload => minify(upload.file as File)
-              .then(res => upload.file = res)
-          )
-        ).then(() => {
-          setUploadedFiles((state) => state.concat(newUploadedFiles))
-        })
-      },
-      []
-    );
-
-    const onDrop = useCallback(
-      (files) => {
-        handleUpload(files);
-      },
-      [handleUpload]
-    );
-
-    const {
-      getRootProps,
-      getInputProps,
-      isDragActive,
-      isDragReject,
-    } = useDropzone({
-      accept: ["image/jpeg", "image/pjpeg", "image/png", "image/gif"],
-      onDrop,
-    });
-
-    const renderDragMessage = useCallback(() => {
-      if (!isDragActive) {
-        return <UploadMessage>Clique aqui para upload ou arraste os documentos aqui.</UploadMessage>;
-      }
-
-      if (isDragReject) {
-        return (
-          <UploadMessage type="error">
-            Tipo de arquivo não suportado
-          </UploadMessage>
-        );
-      }
-
-      return <UploadMessage type="success">Solte os documentos aqui</UploadMessage>;
-    }, [isDragActive, isDragReject]);
-
-    return (
-      <DropContainer {...getRootProps()} style={{ width: "100%", height: `200px`, backgroundColor: `#FAFAFA`, display: "flex", justifyContent: "center" }}>
-        <input {...getInputProps()} />
-        {renderDragMessage()}
-      </DropContainer>
-    );
-  }
-
-  function UploadArquivos2() {
-
-    const handleUpload = useCallback(
-      (files: File[]) => {
-        files.map((file: File) => {
-          if (!file.name.toLowerCase().includes('.jpg') && !file.name.toLowerCase().includes('.png') && !file.name.toLowerCase().includes('.jpeg')) {
-            setAlertErro(true);
-            setMsgErro('Extensão de arquivo não suportada');
-            return;
-          }
-        })
-
-        const newUploadedFiles2: IFile[] = files.map((file: File) => ({
-          file,
-          id: uuidv4(),
-          name: file.name,
-          readableSize: filesize(file.size),
-          preview: URL.createObjectURL(file),
-          progress: 0,
-          uploaded: false,
-          error: false,
-          url: "",
-          codTipoArquivo: "0",
-          codArquivo: "0"
-        }));
-
-        setUploadedFiles2((state) => state.concat(newUploadedFiles2));
-      },
-      []
-    );
-    const onDrop = useCallback(
-      (files) => {
-        handleUpload(files);
-      },
-      [handleUpload]
-    );
-
-    const {
-      getRootProps,
-      getInputProps,
-      isDragActive,
-      isDragReject,
-    } = useDropzone({
-      accept: ["image/jpeg", "image/pjpeg", "image/png", "image/gif"],
-      onDrop,
-    });
-
-    const renderDragMessage = useCallback(() => {
-      if (!isDragActive) {
-        return <UploadMessage>Clique aqui para upload ou arraste os documentos aqui.</UploadMessage>;
-      }
-
-      if (isDragReject) {
-        return (
-          <UploadMessage type="error">
-            Tipo de arquivo não suportado
-          </UploadMessage>
-        );
-      }
-
-      return <UploadMessage type="success">Solte os documentos aqui</UploadMessage>;
-    }, [isDragActive, isDragReject]);
-
-    return (
-      <DropContainer {...getRootProps()} style={{ width: "100%", height: `200px`, backgroundColor: `#FAFAFA`, display: "flex", justifyContent: "center" }}>
-        <input {...getInputProps()} />
-        {renderDragMessage()}
-      </DropContainer>
-    );
-  }
   const deletePreviewPhotoFisica = (id: any) => {
     const newArray = uploadedFiles.filter((file) => file.id !== id)
     setUploadedFiles(newArray)
@@ -585,60 +388,6 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
     setUploadedFiles2(newArray)
 
   }
-  const FileListArquivos = () => {
-    return (
-      <Container>
-        <Slider {...settings}>
-          {uploadedFiles.map((uploadedFile: IFile) => (
-            <li key={uploadedFile.id}>
-              <FileInfo >
-                <Preview src={uploadedFile.preview} />
-                <div>
-                  <p style={{ margin: `0`, width: '100px', height: '20px', textOverflow: 'ellipsis', overflow: 'hidden', direction: 'ltr' }}>{uploadedFile.name}</p>
-                  <span style={{ color: `#000` }}>
-                    {uploadedFile.readableSize}{" "}
-                    {!!uploadedFile.preview && (
-                      <button className="btnExcluir" onClick={() => deletePreviewPhotoFisica(uploadedFile.id)}>
-                        x
-                      </button>
-                    )}
-                  </span>
-                </div>
-              </FileInfo>
-            </li>
-          ))}
-        </Slider>
-
-
-      </Container>
-    );
-  };
-  const FileListArquivos2 = () => {
-    return (
-      <Container>
-        <Slider {...settings}>
-          {uploadedFiles2.map((uploadedFile: IFile) => (
-            <li key={uploadedFile.id}>
-              <FileInfo >
-                <Preview src={uploadedFile.preview} />
-                <div>
-                  <p style={{ margin: `0`, width: '100px', height: '20px', textOverflow: 'ellipsis', overflow: 'hidden', direction: 'ltr' }}>{uploadedFile.name}</p>
-                  <span style={{ color: `#000` }}>
-                    {uploadedFile.readableSize}{" "}
-                    {!!uploadedFile.preview && (
-                      <button className="btnExcluir" onClick={() => deletePreviewPhotoFisica2(uploadedFile.id)}>
-                        x
-                      </button>
-                    )}
-                  </span>
-                </div>
-              </FileInfo>
-            </li>
-          ))}
-        </Slider>
-      </Container>
-    );
-  };
 
   return (
     <>
@@ -834,13 +583,14 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
         <span>Só serão aceitas imagens com as seguintes extensões: *jpg,*jpeg e *png.</span>
       </div>
 
-
-      <div className="col-md-3 col-12 mb-4">
-        <UploadArquivos></UploadArquivos>
-      </div>
-      <div className="col-md-9 col-12 mb-4">
-        <FileListArquivos></FileListArquivos>
-      </div>
+      <Upload 
+        upload={`/arquivos-corretor/cadastrar?codCorretor=${usuario.codCorretor}`}
+        remove={'/arquivos-corretor/excluir/:id'}
+        format={format}
+        meta={meta1}
+        onDone={onDone}
+        onAfterInit={initUpload(0)}
+        />
 
       <div className="col-lg-12 mt-5 ">
         <p>Faça o Upload do seu comprovante de residência<span style={{ color: '#FF715B' }}>*</span></p>
@@ -852,18 +602,33 @@ const ProfileCadastroUserCorretor = (props: IArquivo) => {
         <span>Só serão aceitas imagens com as seguintes extensões: *jpg,*jpeg e *png.</span>
       </div>
 
-      <div className="col-md-3 col-12 mb-4">
-        <UploadArquivos2></UploadArquivos2>
-      </div>
-      <div className="col-md-9 col-12 mb-4">
-        <FileListArquivos2></FileListArquivos2>
-      </div>
-      <div className="col-lg-12 mt-0 pt-4 row-gray text-end" >
-        <button className="buttonSalvar" onClick={handleSubmit} >
-          {loading ? (<>Salvando <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /></>)
-            : (<>Salvar e continuar</>)}
-
-        </button>
+      <Upload 
+        upload={`/arquivos-corretor/cadastrar?codCorretor=${usuario.codCorretor}`}
+        remove={'/arquivos-corretor/excluir/:id'}
+        format={format}
+        meta={meta2}
+        onDone={onDone}
+        onAfterInit={initUpload(1)}
+      />
+      
+      <div className="col-lg-12 mt-0 pt-4 row-gray text-end">
+        <div
+          className="buttonSalvar"
+          onClick={handleSubmit}
+          style={{float: 'right'}}
+          {...{disabled: loading}}
+        >
+          <a style={{marginRight: '10px'}}>{!loading ? "Salvar edição" : "Salvar"} e continuar</a>
+          {loading ? (
+            <div
+              className="spinner-border spinner-border-sm"
+              role="status"
+              style={{ marginLeft: "0.5rem" }}
+            />
+          ) : (
+            <FiSave />
+          )}
+        </div>
       </div>
     </>
   )

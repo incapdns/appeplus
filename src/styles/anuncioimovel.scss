@@ -15,6 +15,12 @@
   border: none;
   padding: 13px 33px;
   border-radius: 4px;
+  float: right;
+  cursor: pointer;
+}
+
+.buttonSalvar[disabled] {
+  cursor: default;
 }
 
 .buttonVoltar {

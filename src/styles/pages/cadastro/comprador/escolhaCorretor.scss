@@ -14,7 +14,14 @@
             border: none;
             padding: 13px 33px;
             border-radius: 4px;
-          }
+            float: right;
+			cursor: pointer;
+		}
+
+		.buttonSalvar[disabled] {
+			cursor: default;
+		}
+		
         .buttonBack {
             font-weight: 600;
             color: #2E2E2E;

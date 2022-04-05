@@ -14,7 +14,14 @@
   background-color: #0065dd;
   border: none;
   padding: 13px 33px;
+  float: right;
+  cursor: pointer;
 }
+
+.buttonSalvar[disabled] {
+  cursor: default;
+}
+
 .row-gray {
   margin: 0;
   border-top: 1px solid #e1e1e1;
