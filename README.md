@@ -1,1 +1,0 @@
-Repositório de demonstração p/ testar performance na borda do CF.
