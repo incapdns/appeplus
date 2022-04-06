@@ -8,7 +8,7 @@ interface Props {
   title?: boolean;
 }
 
-export function ValidacaoEmail() {
+export default function ValidacaoEmail() {
   const [endpoint, setEndpoint] = useState("");
   console.log(
     "🚀 ~ file: validacaoEmail.tsx ~ line 10 ~ ValidacaoEmail ~ endpoint",

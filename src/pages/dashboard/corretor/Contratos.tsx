@@ -79,7 +79,7 @@ interface iContratosApi {
   imovel: iImovel;
 }
 
-export function Contratos() {
+export default function Contratos() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

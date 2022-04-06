@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import Footer from "../../../components/Footer";
 import Grafico from "../../../components/Dashboard/Grafico";
 
-export function DashboardCorretor() {
+export default function DashboardCorretor() {
   const history = useHistory();
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"

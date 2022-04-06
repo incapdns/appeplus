@@ -1,11 +1,15 @@
+import React, { Suspense } from "react";
 import { useHistory } from "react-router-dom";
-import Routes from "./Routes/Routes";
+
+const Routes = React.lazy(() => import('./Routes/Routes'))
 
 function App() {
   (window as any)['root_history'] = useHistory();
 
   return (
-    <Routes />
+    <Suspense fallback={<></>}>
+      <Routes />
+    </Suspense>
   );
 }
 

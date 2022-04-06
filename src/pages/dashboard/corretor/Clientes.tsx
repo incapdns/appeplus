@@ -38,7 +38,7 @@ interface iCliente {
   ];
 }
 
-export function DashboardClientes() {
+export default function DashboardClientes() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

@@ -100,7 +100,7 @@ interface iCorretor {
   arquivosCorretor: any[];
 }
 
-export function AdmCorretor() {
+export default function AdmCorretor() {
   const [checkedDocs, setcheckedDocs] = useState(false);
 
   const [checkedDoc, setcheckedDoc] = useState(false);

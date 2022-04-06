@@ -38,7 +38,7 @@ interface iEventos {
   end: string;
 }
 
-export function Agenda() {
+export default function Agenda() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

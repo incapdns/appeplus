@@ -19,7 +19,7 @@ interface iDadosGraficos {
 }
 
 
-export function DashboardAdm() {
+export default function DashboardAdm() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

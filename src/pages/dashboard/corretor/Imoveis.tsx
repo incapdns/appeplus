@@ -69,7 +69,7 @@ interface iImovel {
   imgsDoImovel: string[];
 }
 
-export function DashboardImoveis() {
+export default function DashboardImoveis() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

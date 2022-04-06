@@ -19,7 +19,7 @@ interface iCorretoresPendentes {
   codCorretor: number;
 }
 
-export function AdmCorretores() {
+export default function AdmCorretores() {
   const history = useHistory();
   const [corretores, setCorretores] = useState<iCorretoresPendentes[]>([]);
   let [filterCorretores, setFilterCorretores] = useState<iCorretoresPendentes[]>([]);

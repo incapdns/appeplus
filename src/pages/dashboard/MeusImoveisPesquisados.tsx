@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import Loading from "../../components/Loading";
 
-export function MeusImoveisPesquisados() {
+export default function MeusImoveisPesquisados() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

@@ -67,7 +67,7 @@ interface iHistoricoImovel {
   imgsDoImovel: [string];
 }
 
-export function HistoricoImoveis() {
+export default function HistoricoImoveis() {
   const [pagina, setPagina] = useState(1);
   const [historico, setHistorico] = useState<iHistorico[]>([]);
   const [imovel, setImovel] = useState<iHistoricoImovel>();

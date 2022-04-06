@@ -37,7 +37,7 @@ import React from "react";
 //   );
 // };
 
-export function CadastroInteresse() {
+export default function CadastroInteresse() {
   const history = useHistory();
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"

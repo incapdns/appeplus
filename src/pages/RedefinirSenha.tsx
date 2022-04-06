@@ -14,7 +14,7 @@ interface Props {
     title?: boolean;
 }
 
-export function RedefinirSenha() {
+export default function RedefinirSenha() {
     const usuario: iDadosUsuario = JSON.parse(
         localStorage.getItem("@appePlus/usuario") || "{}"
     );

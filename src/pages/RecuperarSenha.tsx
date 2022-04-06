@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import api from "../services/api";
 import "../styles/pages/recuperarSenha.scss";
 
-export function RecuperarSenha() {
+export default function RecuperarSenha() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

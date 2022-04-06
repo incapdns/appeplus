@@ -155,7 +155,7 @@ interface iFilterDoc {
   url: string
 }
 
-export function AdmDetalheImovel() {
+export default function AdmDetalheImovel() {
   const { id } = useParams<iParamTypes>();
   const history = useHistory();
   const [imovel, setImovel] = useState({} as iImovel);

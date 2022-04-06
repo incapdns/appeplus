@@ -31,7 +31,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { iDadosUsuario } from "../../../@types";
 import { useHistory } from "react-router";
 
-export function DashboardImoveis() {
+export default function DashboardImoveis() {
   const [tipoNegociacao, setTipoNegociacao] = useState("imovel");
   const history = useHistory();
   const usuario: iDadosUsuario = JSON.parse(

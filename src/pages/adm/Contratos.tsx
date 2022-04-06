@@ -22,7 +22,7 @@ interface iContratosPendentes {
   dataCadastroContrato: string;
 }
 
-export function AdmContratos() {
+export default function AdmContratos() {
   const history = useHistory();
   function handleClick(id: number) {
     history.push(`/adm/contrato/${id}`);

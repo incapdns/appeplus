@@ -136,7 +136,7 @@ interface iClienteCorretor {
   tipoCliente: null;
 }
 
-export function DashboardNegociacoes() {
+export default function DashboardNegociacoes() {
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"
   );

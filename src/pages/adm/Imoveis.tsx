@@ -52,7 +52,7 @@ interface iImovel {
   imgsDoImovel: string[];
 }
 
-export function AdmImoveis() {
+export default function AdmImoveis() {
   const history = useHistory();
   function handleClick(id: number) {
     history.push(`/adm/detalhe-imovel/${id}`);

@@ -49,7 +49,7 @@ interface iItensSelecionados {
   codConjunto?:number;
 }
 
-export function CadastroDetalhes() {
+export default function CadastroDetalhes() {
   const history = useHistory();
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@appePlus/usuario") || "{}"

@@ -163,7 +163,7 @@ interface iContrato {
   arquivoContrato: any;
 }
 
-export function AdmContrato() {
+export default function AdmContrato() {
   const { id } = useParams<iParamTypes>();
   const history = useHistory();
   const [dados, setDados] = useState({} as iContrato);
